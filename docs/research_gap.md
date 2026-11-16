@@ -49,8 +49,8 @@ as orders of magnitude.
 | Static optimisation | Mwakijale 2026 (Paderborn thesis): MILP, ten houses, Tanzania | Optimal swarm grid planning | One design year; no demand growth, upgrade path, market or budgets in the parts I could read |
 | Market design | Dumitrescu, Lüth, Weibezahn & Groh 2022 (EEEP); Bertram et al. 2024 (JCLP) | Community PPAs; local market, central vs bilateral clearing, Madagascar | Capacities given; no investment under uncertainty |
 | Equilibrium | Ouanes et al. 2026 (Energy Economics) | MCP with endogenous investment and tariffs | Fixed demand, three nanogrids, one week, free interconnection |
-| Market power | Bou Gebrael et al. 2026 (arXiv) | Bilevel model, diesel microgrid monopolist, price caps | Diesel incumbent in Lebanon; not PV swarms, no network growth |
-| Multi-year mini-grids | Fioriti et al. 2021 (Comillas); Sayani et al. 2023; Petrelli (PoliMi thesis) | Stochastic or multi-stage sizing under load growth | Mini-grids only; no interconnection or technology ladder |
+| Market power | Bou Gebrael et al. 2026 (arXiv) | Bilevel model, diesel microgrid monopolist, price caps | Diesel incumbent; not PV swarms, no network growth |
+| Multi-year mini-grids | Fioriti, Poli, Dueñas-Martínez & Pérez-Arriaga 2021 (Pisa, MIT Energy Initiative); Sayani et al. 2023; Petrelli (PoliMi thesis) | Stochastic or multi-stage sizing under load growth; Fioriti et al. report savings beyond 16–20 % of net present cost against single-year sizing | Mini-grids only; no interconnection or technology ladder |
 | Grid arrival | Hoffmann 2019 (RLI); González Grandón, de Cuadra & Pérez-Arriaga 2021 | Mini-grids facing or under the main grid | Not the bottom-up side |
 | National planning | OnSSET (KTH); REM (MIT/Comillas); Rwanda multi-stage stochastic plan (2022) | Grid vs mini-grid vs stand-alone at country scale | No swarm or mesh option in the tools I checked |
 | Practitioner evidence | Okra Network Planner; CrossBoundary 2025 (Nigeria); GEAPP (Haiti) | Site-level mesh vs mini-grid costs; CrossBoundary reports full mesh deployment 41 % cheaper than mini-grids | Proprietary or case-specific; not in the academic planning literature |
@@ -70,7 +70,8 @@ Two side observations:
 **Gap 1: the option value of modularity is unmeasured.** Swarm papers argue that staged,
 bottom-up growth is the main advantage over mini-grids (Hoffmann & Ansari say so
 explicitly). The models that study swarms are static. The models that value staging under
-uncertain demand exist only for mini-grids and for national plans. I found no model that
+uncertain demand exist only for mini-grids (including one co-authored at MIT) and for
+national plans. I found no model that
 optimises *which lines to build and when*, and *when to centralise*, on a scenario tree.
 Confidence that this is open: fairly high.
 
@@ -197,10 +198,10 @@ Paper 1 alone is a well-defined OR contribution and does not need proprietary da
   has published with Ignacio Pérez-Arriaga (MIT) and Fernando de Cuadra (Comillas, Waya
   co-founder) on undergrid mini-grids. Steven Gabriel is on the same paper. The first
   author is at Humboldt University in Berlin.
-- REM is a cost-minimising design tool. Strategic operators and staged investment under
-  uncertainty are not part of it as far as I could see. Comillas itself is strong in
-  stochastic optimisation (Fioriti et al. is from there), so the edge to bring is the
-  combination of equilibrium modelling, staging and a swarm option, not one method.
+- REM is a cost-minimising design tool. Strategic operators and a swarm option are not
+  part of it as far as I could see. Pérez-Arriaga co-authored the multi-year stochastic
+  mini-grid paper (Fioriti et al. 2021), so the group already cares about staging. The
+  edge to bring is the swarm ladder with network design plus the equilibrium layer.
 
 ## 8. What could sink it
 
@@ -240,7 +241,7 @@ Paper 1 alone is a well-defined OR contribution and does not need proprietary da
 - Bertram et al. (2024), J. Cleaner Production 449. https://ntnuopen.ntnu.no/ntnu-xmlui/handle/11250/3146079
 - Richard et al. (2022), Energies 15(18), 6727. https://www.mdpi.com/1996-1073/15/18/6727
 - Bou Gebrael, Olleik, Zwickl-Bernhard (2026), arXiv 2603.16893. https://arxiv.org/abs/2603.16893
-- Fioriti et al. (2021), Electric Power Systems Research 194. https://repositorio.comillas.edu/jspui/bitstream/11531/57498/6/IIT-21-023A_preview.pdf
+- Fioriti, Poli, Dueñas-Martínez, Pérez-Arriaga (2021), Electric Power Systems Research 194, 107053. https://doi.org/10.1016/j.epsr.2021.107053
 - Sayani et al. (2023), J. Phys. Energy 5. https://eprints.whiterose.ac.uk/194353/1/Sayani_2023_J._Phys._Energy_5_014004.pdf
 - Multi-stage stochastic electrification planning, Rwanda (2022), IEEE PowerAfrica. https://iro.uiowa.edu/esploro/outputs/conferenceProceeding/Multi-Stage-Stochastic-Electrification-Planning-under-Demand/9984380451502771
 - Hoffmann (2019), micro grids facing interconnection, RLI. https://reiner-lemoine-institut.de/?p=3253
