@@ -9,58 +9,65 @@
 \captionsetup{font=small,labelfont=bf}
 \newcommand{\musd}{USD~million}
 
-\title{Build for today, adapt tomorrow:\\ technology choice under demand uncertainty in least-cost electrification planning\\[4pt]
+\title{When to build ahead of demand:\\ staged technology choice under demand uncertainty\\ in least-cost electrification planning\\[4pt]
 \large Evidence from 128,000 off-grid settlements in Madagascar}
 \author{Felix C.\,L. Mergenhagen\thanks{DIW Berlin and Technische Universit\"at Berlin. Draft prepared with the
 assistance of an AI model; code and results are in the accompanying repository
 (\texttt{national/}, \texttt{onsset\_madagascar/}, \texttt{swarmplan/}, \texttt{case\_study/}).}}
-\date{Working draft v0.1, 16 November 2026}
+\date{Working draft v0.2, 17 November 2026}
 
 \begin{document}
 \maketitle
 \vspace{-1.2em}
 \begin{center}
 \fbox{\parbox{0.92\textwidth}{\small\textbf{Status.} Preliminary. The OnSSET inputs are of 2019 vintage, part of the
-model specification is assumed, and the swarm-grid cost parameters are not yet based on field data
+model specification is assumed, and the adaptation frictions and swarm-grid costs are not based on field data
 (Section~\ref{sec:limits}). Numbers will change. Not for citation.}}
 \end{center}
 
 \begin{abstract}
 \noindent Geospatial least-cost models assign one technology to each settlement for an assumed level of demand.
-Using OnSSET for Madagascar, we show that this assignment is unstable: between a low and a high rural demand
-target, 11.3 million people (32\,\% of the 2030 population) move from stand-alone solar to mini-grids, and
-investment rises from USD 3.8 to 12.2 billion. We then treat demand as uncertain in a two-stage decision model for
-128,065 off-grid settlements with 17 million people. Three results follow. First, building for the high target from
-the outset costs 2.4 times as much as building for current demand and adapting if demand rises with probability
-25\,\%, and still a third more if the rise is certain. Second, this simple adaptive rule is within 0.5\,\% of the
-stochastic optimum for probabilities up to one half, and perfect foresight is worth less than 1\,\%. Third, an
-intermediate swarm-grid option lowers expected cost by 1 to 2\,\% in our central case and by up to 11\,\% if
-distributed generation carries no cost premium; hardware that survives an upgrade is worth more, 2 to 3\,\%.
-The value lies in modularity, not in forecasting.
+Using OnSSET for Madagascar, we first show how much rests on that assumption: between a low and a high rural demand
+target, 11.3 million people (32\,\% of the 2030 population) move from stand-alone solar to mini-grids and
+investment rises from USD 3.8 to 12.2 billion. We then model 128,065 off-grid settlements with 17 million people as
+a multi-stage stochastic programme with four demand states, stranded capital when the technology changes, a cost
+premium on later expansion and a lag before an upgrade delivers. Three results follow. First, sizing every system
+for the Tier~3 target from day one costs 2.3 times as much as re-planning for current demand at every stage when
+demand rises with 25\,\% probability per five-year stage, and 1.7 times at 50\,\%; it is more expensive on every
+demand path. Second, whether simple re-planning is good enough depends on one quantity, the value of the energy not
+served while an upgrade is under way. Up to about USD 2 per kWh, re-planning is within 3\,\% of the stochastic
+optimum. Beyond that the optimum builds one tier ahead in a growing share of settlements, and the best simple rule
+loses up to 13\,\%. Third, a swarm-grid option
+lowers expected cost by 2.5 to 4\,\% in the central case, about as much as making stand-alone systems reusable in
+mini-grids, and the two are largely substitutes.
 
-\medskip\noindent\textbf{Keywords:} electricity access, demand uncertainty, staged investment, swarm electrification,
-mini-grids, geospatial planning, Madagascar. \quad \textbf{JEL:} O13, Q41, Q48, D81, L94.
+\medskip\noindent\textbf{Keywords:} electricity access, demand uncertainty, capacity expansion, stochastic dynamic
+programming, swarm electrification, mini-grids, Madagascar. \quad \textbf{JEL:} O13, Q41, Q48, D81, C61, L94.
 \end{abstract}
 
 \section{Introduction}
 National electrification plans are increasingly built with geospatial least-cost models such as OnSSET
 \citep{mentis2017} and the Reference Electrification Model \citep{rem2018}. For every settlement these tools pick the
-cheapest of grid extension, a mini-grid or stand-alone systems. The choice depends on how much electricity people
-are assumed to use, and that is the least known input. Newly connected rural households often consume very little
-\citep{lee2019}, and plans that are least-cost on paper frequently cannot be financed or implemented
-\citep{diazpastor2026}.
+cheapest of grid extension, a mini-grid or stand-alone systems, sized for a demand target in the plan's final year.
+That the chosen technology depends strongly on the demand target is well documented
+\citep{korkovelos2019,sahlberg2023}. Demand is also the least known input: newly connected rural households often
+consume very little \citep{lee2019}, and plans that are least-cost on paper frequently cannot be financed or
+implemented \citep{diazpastor2026}.
 
-Swarm electrification has been proposed as a way around the dilemma: start with small solar systems, interconnect
-them step by step, and upgrade when demand justifies it \citep{groh2014,kirchhoff2019,sheridan2023}. The claimed
-advantage is that investment follows demand instead of running ahead of it. Existing swarm models, however, study
-a single community in a single design year \citep{hoffmann2019,bertram2024,dumitrescu2022,ouanes2026}, while multi-year stochastic planning has been
-developed for mini-grids alone \citep{fioriti2021}. Whether a modular middle option matters at the scale of a
-national plan, and how much, has not been quantified.
+How much capacity to build ahead of uncertain demand is a classic problem \citep{manne1961,dixit1994}, but it has
+hardly been posed for access planning at national scale. Multi-year stochastic planning exists for single
+mini-grids \citep{fioriti2021}. \citet{sahlberg2023} extend OnSSET to long-term pathways with partly compatible grid
+and off-grid assets, under deterministic scenarios. Swarm electrification, which starts with small solar systems,
+interconnects them and upgrades when demand justifies it, is promoted as a way to let investment follow demand
+\citep{groh2014,kirchhoff2019,sheridan2023}, yet existing swarm models study a single community in a single
+design year \citep{hoffmann2019,bertram2024,dumitrescu2022,ouanes2026}.
 
-This paper makes three contributions. (i) It measures how unstable a least-cost plan is with respect to the demand
-assumption, settlement by settlement. (ii) It embeds OnSSET's own cost estimates in a two-stage decision model with
-uncertain demand and compares four planning rules. (iii) It adds a swarm-grid option whose cost is derived from
-OnSSET's mini-grid cost through additional model runs, and maps the conditions under which the option has value.
+This paper makes three contributions. (i) It quantifies, settlement by settlement, how much of Madagascar's
+least-cost plan is decided by the demand assumption. (ii) It formulates technology choice and sizing for every
+off-grid settlement as a multi-stage stochastic programme on OnSSET's own cost estimates, with explicit adaptation
+frictions, and compares simple planning rules with the stochastic optimum and with perfect information
+\citep{birge1982}. (iii) It adds a swarm-grid option whose cost is derived from OnSSET's mini-grid cost through
+additional model runs, and measures its value against that of hardware compatibility.
 
 \section{Data and baseline}
 We use the Global Electrification Platform inputs for Madagascar: 155,275 settlements, 27.7 million people in 2020
@@ -83,159 +90,298 @@ Investment 2020--2030 (USD billion) & 3.8 & 12.2\\\midrule
 \end{table}
 
 \begin{figure}[!ht]\centering
-\includegraphics[width=0.56\textwidth]{fig_madagascar_switch.png}
+\includegraphics[width=0.54\textwidth]{fig_madagascar_switch.png}
 \caption{Settlements by how their least-cost technology responds to the demand target.}\label{fig:map}
 \end{figure}
 
-For a third of the population the plan is therefore determined by an assumption. The investment requirement triples.
+For a third of the population the plan is determined by an assumption, and the investment requirement triples.
 For comparison, the national integrated energy access plan puts the cost of universal access by 2030 at about
 USD 7 billion, excluding new grid generation and transmission, and assigns roughly half of its 9 million new
 connections to stand-alone solar and a fifth to mini-grids \citep{seforall2024}.
 
 \section{Model}\label{sec:model}
-\subsection{Domain and costs}
+\subsection{Domain, demand states and costs}
 The analysis covers the 128,065 settlements that are unelectrified in 2020 and are not reached by the grid in either
-baseline plan (17.0 million people in 2025). For technology $k$ and demand level $d\in\{L,H\}$, OnSSET's first-step
-levelised cost and the settlement's annual energy demand give the annual cost
+baseline plan: 17.0 million people in 2025, of whom 3.6 million live in 703 off-grid towns that the data classify
+as urban. Demand takes one of four states $d\in\{1,2,3,4\}$. States 1 and 3 are the platform's low and high targets;
+states 2 and 4 set the rural target to Tier~2 and Tier~4 and keep the urban target of the neighbouring state
+(Table~\ref{tab:cost}). OnSSET was run once for each state. For technology $k$, its first-step levelised cost and
+the settlement's annual energy demand $E_d$ give the annual cost of a system sized for state $d$,
 \begin{equation}
-A_{kd}=\mathrm{LCOE}_{kd}\cdot E_d \qquad\text{(USD per year)} .
+A_{k}(d)=\mathrm{LCOE}_{k}(d)\cdot E_d \qquad\text{(USD per year)} .
 \end{equation}
 Technologies are stand-alone solar (SA), a conventional mini-grid (MG; the cheapest of PV-hybrid, hydro and
 wind-hybrid) and, in the extended menu, a swarm grid (SW).
 
-\subsection{Two-stage decision}
-Stage~1 covers years 1--5, stage~2 years 6--15; the discount rate is 8\,\%, which gives stage weights
-$w_1=0.466$ and $w_2=0.534$. Demand is low in stage~1. In stage~2 it stays low with probability $1-p$ or rises to
-the high level with probability $p$. A first-stage action is a technology and a size, $a=(k,s)$.
+\subsection{Stages and demand}
+There are three stages of five years; the discount rate is 8\,\%. Demand is in state~1 in the first stage. From one
+stage to the next it stays where it is with probability $1-g$, rises one state with probability $0.7\,g$ and two
+states with probability $0.3\,g$; state~4 is absorbing. The planner observes demand at the start of a stage and
+then decides. All costs are expressed as equivalent annual amounts over the 15 years: $w_t$ is the share of stage
+$t$ in the present value of a constant annual flow and $W_t=\sum_{\tau\ge t}w_\tau$.
 
-\emph{Sized for low demand}, $a=(k,L)$. The system costs $A_{kL}$ while demand is low. If demand rises it can be
-expanded in place or replaced by technology $j$, in which case the share $(1-\chi_{kj})$ of its capital is stranded:
+\subsection{Assets, actions and costs}
+An asset $a=(k,s)$ is a technology and a size, where size $s$ means ``built for demand state $s$''. At every stage
+the planner may keep the asset, expand it, or replace it by another technology; the asset in place must be able to
+serve current demand, and a technology is never downsized:
+$\mathcal F(a,d)=\{(k',s'):\ s'\ge d,\ \text{and } s'\ge s \text{ if } k'=k\}$.
+
+\emph{Operation.} An asset of size $s$ serving demand $d\le s$ costs its capital share plus the running cost of the
+energy served, and never less than the right-sized system:
 \begin{equation}
-C^{H}_{2}(k,L)=\min\Big\{A_{kH},\ \min_{j\neq k}\big[A_{jH}+(1-\chi_{kj})\,\sigma_k A_{kL}\big]\Big\},
+c\big((k,s),d\big)=\max\Big\{A_k(d),\ \sigma_kA_k(s)+(1-\sigma_k)A_k(s)\,\frac{E_d}{E_s}\Big\}.
 \end{equation}
-where $\sigma_k$ is the capital share of levelised cost and $\chi_{kj}\in[0,1]$ the share of $k$'s hardware that
-remains useful under $j$.
 
-\emph{Sized for high demand}, $a=(k,H)$. The system costs $A_{kH}$ once demand is high. While demand is low it costs
-its capital share plus the running cost of the energy actually used,
-$\bar A_{kH}=\sigma_kA_{kH}+(1-\sigma_k)A_{kH}\,E_L/E_H$.
+\emph{Switching.} When technology $k$ is replaced by $k'$, the share $1-\chi_{kk'}$ of its capital cannot be reused
+and stays on the books until the horizon.
 
-Expected cost is
+\emph{Expansion.} Capacity added to an existing system costs $(1+\varepsilon)$ times what it would have cost as part
+of the original build. Together:
 \begin{equation}
-EC(a)=w_1C_1(a)+w_2\big[(1-p)\,C_2^{L}(a)+p\,C_2^{H}(a)\big].
+\tau\big((k,s),(k',s')\big)=
+\begin{cases}
+(1-\chi_{kk'})\,\sigma_kA_k(s) & k'\neq k,\\
+\varepsilon\,\sigma_k\,\big[A_k(s')-A_k(s)\big]^+ & k'=k,
+\end{cases}
 \end{equation}
-We compare four rules: \emph{build for the high target} (the technology that is cheapest at high demand, sized for
-it from day one); the \emph{adaptive rule} (the technology that is cheapest at current demand, sized for it,
-re-optimised if demand rises); the \emph{stochastic optimum} ($\min_a EC(a)$); and \emph{perfect information}
-(the best action in each demand path). Central values are $\sigma_{SA}=0.85$, $\sigma_{MG}=\sigma_{SW}=0.75$,
-$\chi_{SA,MG}=0$ and $\chi_{SA,SW}=\chi_{SW,MG}=1$.
+an annual flow paid from the stage of the change to the horizon.
+
+\emph{Upgrade lag.} If demand exceeds the installed size at the start of a stage, the additional energy is not
+served for $\ell$ years and is valued at $v$ per kWh: $\lambda_t(a,d)=\omega_t\,v\,[E_d-E_s]^+$ for $t\ge 2$, where
+$\omega_t$ is the weight of the first $\ell$ years of stage $t$.
+
+\subsection{Recursion and planning rules}
+With $P$ the transition matrix and $V_{T+1}\equiv 0$, the least expected cost satisfies
+\begin{equation}
+V_t(d,a)=\min_{a'\in\mathcal F(a,d)}\Big\{W_t\,\tau(a,a')+w_t\,c(a',d)+\lambda_t(a,d)+\sum_{d'}P_{dd'}\,V_{t+1}(d',a')\Big\}.
+\label{eq:bellman}
+\end{equation}
+Settlements do not interact, so the national optimum is the sum of 128,065 small dynamic programmes with up to
+twelve assets. They are solved jointly with array operations in about two seconds per configuration; the code is
+checked against an independent scalar recursion on the scenario tree.
+
+We compare four rules. \emph{Sizing for the target} builds, from day one, the technology that is cheapest at the
+target state, sized for it; this is what a least-cost plan for the target year prescribes. The target is state~3
+unless stated. \emph{Re-planning} chooses at every stage the cheapest way to serve current demand, taking the
+installed system as given and assuming demand stays where it is. The \emph{stochastic optimum} solves
+\eqref{eq:bellman}. \emph{Perfect information} solves the problem separately for every demand path. The cost of
+re-planning above the optimum is the value of the stochastic solution \citep{birge1982}.
 
 \subsection{A swarm-grid option on OnSSET's cost basis}
 OnSSET's mini-grid cost is linear in the fixed cost per system $F$ (USD 10,000) and in the unit cost of low-voltage
-lines $c$ (USD 4,250 per km). Two additional runs per demand level, one with $F=2{,}500$ and one with $F=2{,}500$
+lines $c$ (USD 4,250 per km). Two additional runs per demand state, one with $F=2{,}500$ and one with $F=2{,}500$
 and $c=2{,}000$, identify for every settlement the decomposition
+$A^{MG\text{-}PV}(d)=G_d+\ell_d\,c+\phi_d\,F$, with $G_d$ the cost of generation, storage and connections. A swarm
+grid is modelled as
 \begin{equation}
-A^{MG\text{-}PV}_{d}=G_d+\ell_d\,c+\phi_d\,F ,
+A_{SW}(d)=(1+\pi)\,G_d+\ell_d\,c_{SW}+\phi_d\,F_{SW}:
 \end{equation}
-with $G_d$ the cost of generation, storage and connections. A swarm grid is modelled as
-\begin{equation}
-A^{SW}_{d}=(1+\pi)\,G_d+\ell_d\,c_{SW}+\phi_d\,F_{SW}:
-\end{equation}
-a smaller fixed cost and cheaper lines, but generation that is more expensive by the premium $\pi$ because it is
-built in small distributed units. The central case is $\pi=0.30$, $F_{SW}=2{,}500$, $c_{SW}=2{,}000$; all three are
-assumptions and are varied below.
+a smaller fixed cost and cheaper lines, but generation that is dearer by the premium $\pi$ because it is built in
+small distributed units.
+
+\subsection{Parameters}
+\begin{table}[!ht]\centering\small
+\caption{Parameters that are assumed, with central values.}\label{tab:par}
+\begin{tabular}{lll}\toprule
+Parameter & Central value & Varied in\\\midrule
+Probability of a rise per stage, $g$ & 0.25 and 0.50 & Table~\ref{tab:rules}\\
+Capital share of levelised cost, $\sigma$ & 0.85 (SA), 0.75 (MG, SW) & Table~\ref{tab:robust}\\
+Reusable share after a switch, $\chi$ & SA$\to$MG 0;\ SA$\to$SW 1;\ SW$\to$MG 1 & Table~\ref{tab:compat}\\
+Expansion premium, $\varepsilon$ & 0.25 & Table~\ref{tab:rules}\\
+Upgrade lag, $\ell$ & 1 year & Table~\ref{tab:rules}\\
+Value of energy not served, $v$ & USD 0.50 per kWh & Table~\ref{tab:voll}, Fig.~\ref{fig:voll}\\
+Swarm grid: $\pi$, $F_{SW}$, $c_{SW}$ & 0.30;\ USD 2,500;\ USD 2,000 per km & Table~\ref{tab:swarm}\\\bottomrule
+\end{tabular}
+\end{table}
+We refer to $\varepsilon=0,\ \ell=0$ as \emph{no frictions}, to the central values as \emph{moderate frictions} and
+to $\varepsilon=0.5,\ \ell=2$ as \emph{strong frictions}. None of the values in Table~\ref{tab:par} comes from field
+data.
 
 \section{Results}
 \subsection{Cost structure}
 \begin{table}[!ht]\centering\small
-\caption{Cost by technology and demand level, off-grid domain.}\label{tab:cost}
-\begin{tabular}{lrrrr}\toprule
- & \multicolumn{2}{c}{USD per person and year} & \multicolumn{2}{c}{Cheapest for (million people)}\\
- & Low & High & Low & High\\\midrule
-Stand-alone solar & 24.1 & 139.7 & 11.7 & 1.5\\
-Mini-grid & 29.6 & 71.7 & 3.9 & 13.9\\
-Swarm grid (central case) & 26.0 & 81.6 & 1.5 & 1.7\\\midrule
-\multicolumn{5}{l}{Mini-grid cost shares (generation etc. / lines / fixed cost): 57 / 13 / 30\,\% at low demand,}\\
-\multicolumn{5}{l}{82 / 5 / 12\,\% at high demand.}\\\bottomrule
-\end{tabular}
+\caption{Demand states and cost by technology, off-grid domain.}\label{tab:cost}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ccrrrrrc}\toprule
+State & Tier, rural & Rural kWh & \multicolumn{3}{c}{USD per person and year} & SA cheaper than & Mini-grid cost: generation\\
+ & / urban & per household & SA & MG & SW & MG (million people) & / lines / fixed (\%)\\\midrule
+1 & 1 / 3 & 57 & 24.1 & 29.6 & 26.0 & 12.5 & 57 / 13 / 30\\
+2 & 2 / 3 & 320 & 36.1 & 36.8 & 35.4 & 6.9 & 65 / 11 / 24\\
+3 & 3 / 4 & 1,172 & 139.7 & 71.7 & 81.6 & 2.0 & 82 / 5 / 12\\
+4 & 4 / 4 & 3,087 & 349.6 & 122.6 & 149.0 & 0.1 & 90 / 3 / 7\\\bottomrule
+\end{tabular}}
 \end{table}
-At low demand almost a third of a mini-grid's cost is the fixed cost per system, which is why stand-alone solar
-wins in most settlements. At high demand mini-grids cost about half as much per person as stand-alone systems.
+At state~1 almost a third of a mini-grid's cost is the fixed cost per system, which is why stand-alone solar wins
+for 12.5 of 17 million people. The two technologies cost about the same on average at state~2, and from state~3 on
+mini-grids cost half as much per person or less. A system for state~2 costs only a quarter to a half more than
+one for state~1; a system for state~3 costs two to six times as much.
 
-\subsection{The cost of committing early}
+\subsection{Sizing for the target against re-planning}
 \begin{table}[!ht]\centering\small
 \caption{Expected cost of four planning rules (\musd{} per year), menu without swarm grids.}\label{tab:rules}
 \begin{tabular}{lrrrrrr}\toprule
-Probability of high demand $p$ & 0 & 0.10 & 0.25 & 0.50 & 0.75 & 1\\\midrule
-Build for the high target & 918 & 930 & 948 & 978 & 1,008 & 1,039\\
-Adaptive rule & 275 & 326 & 401 & 527 & 653 & 779\\
-Stochastic optimum & 275 & 326 & 401 & 524 & 646 & 763\\
-Perfect information & 275 & 324 & 397 & 519 & 641 & 763\\\midrule
-Build for high / adaptive & 3.3 & 2.9 & 2.4 & 1.9 & 1.5 & 1.3\\\bottomrule
+Probability of a rise per stage, $g$ & 0 & 0.10 & 0.25 & 0.50 & 0.75 & 1\\\midrule
+\multicolumn{7}{l}{\emph{Moderate frictions}}\\
+Sizing for the Tier~3 target & 918 & 927 & 949 & 1,007 & 1,092 & 1,203\\
+Re-planning & 275 & 326 & 411 & 579 & 779 & 1,011\\
+Stochastic optimum & 275 & 326 & 411 & 578 & 774 & 995\\
+Perfect information & 275 & 325 & 408 & 571 & 765 & 990\\\midrule
+\multicolumn{7}{l}{\emph{Cost of sizing for the target relative to re-planning}}\\
+No frictions & 3.3 & 3.0 & 2.6 & 2.1 & 1.7 & 1.5\\
+Moderate frictions & 3.3 & 2.8 & 2.3 & 1.7 & 1.4 & 1.2\\
+Strong frictions & 3.3 & 2.7 & 2.1 & 1.5 & 1.2 & 1.0\\\midrule
+\multicolumn{7}{l}{\emph{Cost of re-planning above the stochastic optimum (\%)}}\\
+No frictions & 0.0 & 0.0 & 0.3 & 1.0 & 2.2 & 3.6\\
+Moderate frictions & 0.0 & 0.0 & 0.1 & 0.3 & 0.6 & 1.6\\
+Strong frictions & 0.0 & 0.0 & 0.0 & 0.1 & 2.1 & 8.0\\\bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[!ht]\centering
-\includegraphics[width=0.72\textwidth]{fig_cost_vs_p.png}
-\caption{Expected annual cost of building for the high target and of the adaptive rule.}\label{fig:p}
+\includegraphics[width=0.70\textwidth]{fig_cost_vs_g.png}
+\caption{Expected annual cost of sizing for the target and of re-planning.}\label{fig:g}
 \end{figure}
 
-Building for the high demand target from the outset costs \musd{} 948 a year at $p=0.25$, against \musd{} 401 for the
-adaptive rule: a gap of \musd{} 547 a year, or about USD 32 per person. Even if demand is certain to rise after five
-years, early commitment costs a third more, because oversized systems are paid for during the years in which
-demand is still low.
+With a 25\,\% chance per stage that demand rises, sizing every system for the Tier~3 target costs USD 949 million a
+year against USD 411 million for re-planning: USD 538 million a year more, or USD 32 per person (Table~\ref{tab:rules},
+Figure~\ref{fig:g}). Adaptation frictions narrow the gap but do not close it. With strong frictions the ratio is
+still 2.1 at $g=0.25$ and 1.5 at $g=0.5$; the two rules meet only if demand is certain to rise in every stage.
 
-\subsection{The value of stochastic planning and of information}
-The adaptive rule is within 0.1\,\% of the stochastic optimum at $p=0.25$, 0.5\,\% at $p=0.5$ and 2\,\% at $p=1$.
-Perfect information about future demand would lower cost by less than 1\,\%. Once systems can be expanded or
-replaced, knowing demand in advance is worth little; what matters is not having committed. At $p=0.25$ the
-optimal first-stage plan gives stand-alone solar to 67\,\% of people and small mini-grids to 33\,\%.
+The target rule is not insurance either. Under moderate frictions it costs more than re-planning on every one of
+the eight demand paths (Figure~\ref{fig:paths}), including the path on which demand reaches Tier~3 after five years
+and stays there, because the large system is paid for during the five years in which it is not needed. Under
+strong frictions it is cheaper on the two paths on which demand jumps two states after the first stage; at
+$g=0.25$ their joint probability is 7.5\,\%.
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=0.70\textwidth]{fig_paths.png}
+\caption{National cost of the two rules along every demand path ($g=0.25$, moderate frictions).}\label{fig:paths}
+\end{figure}
+
+The size of the target matters more than the principle. Sizing for Tier~2 from day one costs 22\,\% more than
+re-planning at $g=0.25$ and 10\,\% more at $g=0.5$, a fraction of the penalty for Tier~3.
+
+\subsection{When is re-planning not enough?}
+In Table~\ref{tab:rules} re-planning is within about 1\,\% of the optimum whenever $g\le 0.5$. With moderate
+frictions the optimum then never starts with a system larger than current demand requires. It differs from
+re-planning only in the technology it starts with: for about 4\,\% of people at $g=0.25$ it builds a small
+mini-grid instead of stand-alone systems, so that nothing is stranded later.
+
+That conclusion depends on what a shortfall costs. Figure~\ref{fig:voll} varies the value of the energy not served
+during an upgrade, and Table~\ref{tab:voll} reports what the optimum does.
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=0.80\textwidth]{fig_rules_vs_voll.png}
+\caption{Cost of three simple rules above the stochastic optimum, by the value of energy not served.}\label{fig:voll}
+\end{figure}
+
+\begin{table}[!ht]\centering\small
+\caption{The stochastic optimum and the simple rules as the value of unserved energy rises
+($\varepsilon=0.25$, one-year lag, menu without swarm grids).}\label{tab:voll}
+\begin{tabular}{lrrrrrrr}\toprule
+Value of unserved energy (USD per kWh) & 0.5 & 1 & 2 & 3 & 4 & 6 & 8\\\midrule
+\multicolumn{8}{l}{$g=0.25$}\\
+People whose first system is sized ahead (\%) & 0 & 0 & 0 & 17 & 30 & 57 & 79\\
+Re-planning above optimum (\%) & 0.1 & 0.1 & 0.1 & 0.4 & 1.7 & 6.5 & 13.8\\
+Sizing for Tier 2 above optimum (\%) & 22 & 18 & 11 & 6.5 & 3.8 & 2.6 & 5.1\\
+Sizing for Tier 3 above optimum (\%) & 131 & 112 & 84 & 63 & 48 & 29 & 19\\\midrule
+\multicolumn{8}{l}{$g=0.50$}\\
+People whose first system is sized ahead (\%) & 0 & 6 & 34 & 60 & 78 & 100 & 100\\
+Re-planning above optimum (\%) & 0.3 & 0.3 & 2.9 & 9.7 & 17.8 & 40 & 66\\
+Sizing for Tier 2 above optimum (\%) & 11 & 6.3 & 3.0 & 5.5 & 10 & 26 & 45\\
+Sizing for Tier 3 above optimum (\%) & 74 & 54 & 30 & 19 & 12 & 10 & 13\\\bottomrule
+\end{tabular}
+\end{table}
+
+Three regimes appear. While a kWh not served is worth up to about USD 2 (at $g=0.25$) or USD 1 (at $g=0.5$),
+the optimum does not build ahead and re-planning is as good as optimal. In a middle range the optimum sizes
+one tier ahead for a growing share of people. Sizing everyone for Tier~2 then becomes the best simple rule, but
+it and re-planning both lose several percent, and which of the two is better changes within the range. From about
+USD 6 at $g=0.5$ the optimum builds for Tier~3 in most settlements and the target rule is the least bad. With a
+two-year lag the same pattern appears at half these values. The two simple rules of Table~\ref{tab:rules} break
+even at USD 8.6 per kWh for $g=0.25$ and USD 3.6 for $g=0.5$ (one-year lag); for a Tier~2 target the values are
+USD 4.6 and 2.0.
+
+For orientation, supplying a kWh at state~3 costs USD 0.20 from a mini-grid and USD 0.39 from stand-alone systems
+in our data, so the thresholds are several times the cost of supply. We know of no estimate of the value of unmet
+incremental demand above Tier~1 in rural Madagascar. It is the parameter on which the choice of rule turns.
+
+\subsection{The value of information}
+Perfect foresight is worth at most 1.2\,\% of expected cost under no or moderate frictions. Under strong frictions
+it is worth 5.5\,\% at $g=0.25$ and 8.4\,\% at $g=0.5$, while re-planning stays within 0.1\,\% of the stochastic
+optimum. Knowing where demand will rise would then be valuable, but without that knowledge hedging everywhere
+costs more than it saves. In that regime the lever is better demand information, not more elaborate optimisation.
 
 \subsection{When does a swarm-grid option matter?}
-With the swarm option in its central case, expected cost falls by 1.0\,\% at $p=0.25$ and 1.6\,\% at $p=0.5$, and
-19\,\% of people start with a swarm grid (58\,\% stand-alone solar, 23\,\% mini-grid). Table~\ref{tab:swarm} shows
-that the result hinges on the generation premium.
+With the swarm option in its central case and moderate frictions, expected cost falls by 2.5\,\% at $g=0.25$ and
+4.1\,\% at $g=0.5$ (USD 10 and 24 million a year), and 14\,\% of people start with a swarm grid. Without frictions the
+saving is 1.6 and 2.7\,\%; with strong frictions 3.3 and 5.1\,\%. Table~\ref{tab:swarm} shows that the saving
+hinges on the generation premium.
 
 \begin{table}[!ht]\centering\small
 \caption{Reduction in expected cost from adding the swarm option (\%), by generation premium $\pi$ and fixed cost
-$F_{SW}$; line cost USD 2,000 per km.}\label{tab:swarm}
+$F_{SW}$; moderate frictions, line cost USD 2,000 per km.}\label{tab:swarm}
 \begin{tabular}{lrrrrrr}\toprule
- & \multicolumn{3}{c}{$p=0.25$} & \multicolumn{3}{c}{$p=0.50$}\\
+ & \multicolumn{3}{c}{$g=0.25$} & \multicolumn{3}{c}{$g=0.50$}\\
 $\pi$ \textbackslash{} $F_{SW}$ & 0 & 2,500 & 5,000 & 0 & 2,500 & 5,000\\\midrule
-0 & 9.4 & 7.8 & 6.5 & 11.2 & 9.3 & 7.8\\
-0.15 & 4.5 & 3.3 & 2.3 & 5.9 & 4.4 & 3.1\\
-0.30 & 1.9 & 1.0 & 0.4 & 2.9 & 1.6 & 0.7\\
-0.50 & 0.3 & 0.0 & 0.0 & 0.6 & 0.1 & 0.0\\
-0.75 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\\bottomrule
+0 & 9.5 & 8.2 & 7.2 & 11.5 & 10.2 & 9.2\\
+0.15 & 5.2 & 4.3 & 3.5 & 7.1 & 6.1 & 5.3\\
+0.30 & 3.3 & 2.5 & 2.0 & 4.9 & 4.1 & 3.3\\
+0.50 & 1.5 & 1.1 & 0.8 & 2.8 & 2.1 & 1.6\\
+0.75 & 0.5 & 0.4 & 0.3 & 1.2 & 0.9 & 0.7\\\bottomrule
 \end{tabular}
 \end{table}
-A swarm grid that generates as cheaply as a mini-grid would cut expected cost by 8 to 11\,\%. With a premium of
-50\,\% or more the option is never chosen. The fixed cost matters less than the premium.
+A swarm grid that generates as cheaply as a mini-grid would cut expected cost by 7 to 12\,\%; with a premium of
+75\,\% the option is worth about 1\,\% or less. Exempting the swarm grid from the expansion premium, as its modular
+design would suggest, adds less than 0.1 percentage points in the central case.
 
 \subsection{Compatibility}
 \begin{table}[!ht]\centering\small
-\caption{Expected cost under alternative compatibility assumptions (\musd{} per year, stochastic optimum).}\label{tab:compat}
+\caption{Expected cost under alternative compatibility assumptions (\musd{} per year, stochastic optimum,
+moderate frictions).}\label{tab:compat}
 \begin{tabular}{lrr}\toprule
- & $p=0.25$ & $p=0.50$\\\midrule
-Without swarm option, stand-alone systems stranded by a mini-grid (baseline) & 400.7 & 524.4\\
-Without swarm option, stand-alone systems reusable in a mini-grid & 391.4 & 507.3\\
-With swarm option, central case ($\chi_{SA,SW}=\chi_{SW,MG}=1$, $\chi_{SA,MG}=0$) & 396.8 & 516.2\\
-With swarm option, swarm hardware stranded by a mini-grid & 398.5 & 520.2\\
-With swarm option, stand-alone systems not reusable in a swarm & 398.7 & 519.9\\
-With swarm option, stand-alone systems reusable in a mini-grid & 390.2 & 505.6\\\bottomrule
+ & $g=0.25$ & $g=0.50$\\\midrule
+\multicolumn{3}{l}{\emph{Without swarm option}}\\
+Stand-alone systems stranded by a mini-grid (central) & 411.0 & 577.5\\
+Stand-alone systems half reusable in a mini-grid & 406.5 & 568.1\\
+Stand-alone systems fully reusable in a mini-grid & 400.8 & 556.2\\\midrule
+\multicolumn{3}{l}{\emph{With swarm option}}\\
+Central ($\chi_{SA,SW}=\chi_{SW,MG}=1$, $\chi_{SA,MG}=0$) & 400.6 & 554.0\\
+Swarm hardware stranded by a mini-grid & 404.7 & 565.6\\
+Stand-alone systems not reusable in a swarm & 406.7 & 566.8\\
+Stand-alone systems fully reusable in a mini-grid & 398.4 & 550.9\\\bottomrule
 \end{tabular}
 \end{table}
-Making stand-alone systems reusable when a mini-grid arrives lowers expected cost by 2.3 to 3.3\,\%, more than the
-swarm option does in its central case. About half of the swarm option's value is lost if its hardware is stranded
-by a later mini-grid. The two are substitutes: once stand-alone systems can be absorbed into a mini-grid, adding the
-swarm option lowers cost by only 0.3\,\%. In this model the swarm grid earns its place mainly as a bridge between
-technologies that would otherwise not be compatible.
+Making stand-alone systems reusable when a mini-grid arrives lowers expected cost by 2.5 to 3.7\,\%, about as much
+as the swarm option in its central case (2.5 to 4.1\,\%). The two are largely substitutes: together they save 3.1
+to 4.6\,\%, and once stand-alone systems can be absorbed into a mini-grid the swarm option adds only 0.6 to
+0.9\,\%. The swarm option loses 40 to 50\,\% of its value if its own hardware is stranded by a later mini-grid, and
+somewhat more than half if stand-alone systems cannot be absorbed into it. In this model the swarm grid earns its place
+mainly as a bridge between technologies that would otherwise not be compatible.
 
-\subsection{Robustness}
-Across first-stage lengths of 3 to 8 years, discount rates of 5 to 12\,\% and capital shares of 0.60--0.70 to
-0.90--0.95, the cost ratio of building for the high target to the adaptive rule ranges from 2.1 to 2.7 at
-$p=0.25$ and from 1.6 to 2.2 at $p=0.5$; the adaptive rule stays within 0.9\,\% of the stochastic optimum; and the
-swarm option's value stays between 0.7 and 1.8\,\% (\texttt{national/results/robustness.csv}).
+\subsection{Robustness}\label{sec:robust}
+Table~\ref{tab:robust} varies the demand process, the discount rate, the capital shares, the stage structure and
+the domain. The cost of sizing for the target stays between 2.0 and 2.8 times that of re-planning at $g=0.25$ and
+between 1.5 and 2.1 times at $g=0.5$; re-planning stays within 0.7\,\% of the optimum; the swarm option is worth 2
+to 7\,\%. With two stages and two states the model reproduces the first version of this analysis
+(\texttt{national/two\_stage.py}) to the last digit; there the ratio was 2.4 and 1.9.
+
+\begin{table}[!ht]\centering\small
+\caption{Robustness (moderate frictions). Left of each pair $g=0.25$, right $g=0.50$.}\label{tab:robust}
+\begin{tabular}{lrrrrrr}\toprule
+ & \multicolumn{2}{c}{Target rule /} & \multicolumn{2}{c}{Re-planning above} & \multicolumn{2}{c}{Swarm option}\\
+ & \multicolumn{2}{c}{re-planning} & \multicolumn{2}{c}{optimum (\%)} & \multicolumn{2}{c}{saving (\%)}\\\midrule
+Central & 2.31 & 1.74 & 0.1 & 0.3 & 2.5 & 4.1\\
+Demand rises one state at a time & 2.67 & 2.10 & 0.2 & 0.7 & 2.7 & 4.4\\
+Two-state jumps more likely (share 0.6) & 2.05 & 1.52 & 0.0 & 0.2 & 2.5 & 3.8\\
+Discount rate 5\,\% & 2.24 & 1.66 & 0.1 & 0.4 & 2.8 & 4.4\\
+Discount rate 12\,\% & 2.40 & 1.84 & 0.1 & 0.2 & 2.2 & 3.7\\
+Capital shares 0.70 / 0.60 & 2.00 & 1.55 & 0.1 & 0.2 & 2.1 & 3.3\\
+Capital shares 0.95 / 0.90 & 2.60 & 1.92 & 0.1 & 0.3 & 2.9 & 4.6\\
+Five stages of three years, same hazard & 2.08 & 1.47 & 0.1 & 0.6 & 3.5 & 5.4\\
+Rural settlements only (13.4 million people) & 2.79 & 1.86 & 0.2 & 0.5 & 4.7 & 6.6\\\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Village-level evidence}
 Two companion analyses in the repository look inside the settlement. A multi-stage network-design model of one
@@ -248,42 +394,51 @@ line costs are added the verdict turns on the demand level. Both point the same 
 case for the middle option rests on modularity and compatibility, not on cost savings from sharing energy.
 
 \section{Discussion}
-The results suggest three practical points. First, demand targets in geospatial plans should be read as
-destinations, not as sizing instructions: the cost of sizing for a destination that is years away exceeds the cost
-of any forecast error. Second, plans would gain more from recording which investments keep options open than from
-more elaborate optimisation; a myopic rule with re-planning is near-optimal here. Third, technical standards that
-let small solar systems be absorbed into later networks have a measurable value at national scale, and they are the
-condition under which swarm grids are worth more than a cheaper mini-grid.
+Four practical points follow. First, a demand target in a geospatial plan is better read as a destination than as
+a sizing instruction. Sizing for a Tier~3 target that is years away costs more than re-planning on every demand
+path we consider, unless a shortfall is very costly. Second, the right amount of building ahead is modest and
+selective: where it pays, the optimum goes one tier up, and a Tier~2 system costs little more than a Tier~1
+system. Third, which rule to use turns on the cost of unmet demand during an upgrade and on how long upgrades
+take. Planning tools do not ask for either, and neither has been measured. Fourth, standards that let small solar
+systems be absorbed into later networks are worth as much as an additional technology option, and they are what
+gives the swarm grid most of its value.
 
 \section{Limitations and next steps}\label{sec:limits}
 \begin{itemize}
 \item \textbf{Inputs.} The settlement data are the platform's 2019 inputs. No official specification file was
 available; household sizes, grid cost and tiers follow the published scenario description, while grid losses,
 grid investment cost and the intermediate access target are assumed.
-\item \textbf{Two demand levels, one probability.} Demand is either Tier~1 or Tier~3, with a common probability.
-A distribution of demand paths, and probabilities that vary with remoteness or market access, are the next step.
+\item \textbf{Frictions.} The expansion premium, the upgrade lag and the value of unserved energy are assumptions.
+The third decides which planning rule is best (Table~\ref{tab:voll}).
+\item \textbf{Demand process.} One transition probability applies to all settlements and stages. Probabilities that
+depend on market access or on the technology installed, and learning from early consumption, are natural
+extensions; learning would raise the value of starting small.
+\item \textbf{No coupling between settlements.} There is no national budget or limit on implementation capacity, so
+the problem separates. With a budget per stage it becomes a stochastic programme with linking constraints, for
+which the settlement programmes of this paper are the subproblems of a Lagrangian decomposition.
 \item \textbf{Service quality.} Stand-alone solar at Tier~3 is treated as equivalent to a mini-grid connection.
-\item \textbf{Switching costs.} Stranding is a share of levelised cost; capital shares are assumed. Running costs of
-oversized systems are approximated.
+\item \textbf{Costs of oversized systems.} They rest on assumed capital shares of levelised cost.
 \item \textbf{Swarm costs.} The premium, fixed cost and line cost are not based on field data. Operators of mesh
 and nanogrid systems could supply them; \citet{crossboundary2025} report a 41\,\% lower capital cost per connection
 for a full mesh-grid site than for a conventional mini-grid in Nigeria, and a higher cost where mesh-grids extend an
 existing network.
-\item \textbf{Adaptation.} Expansion and replacement are immediate and cost nothing beyond stranded capital. There
-are no construction lags, transaction costs or lost consumption during an upgrade; all of these would favour
-building somewhat ahead of demand.
-\item \textbf{Grid.} Settlements reached by the grid in either plan are excluded. Later grid arrival, and
-arrangements in which mini-grids operate under the grid \citep{gonzalezgrandon2021}, are not modelled.
+\item \textbf{Grid.} Settlements reached by the grid in either baseline plan are excluded, and the grid is not an
+option inside the domain, although it would reach 3.0 of the 17 million people at state~4. Arrangements in which
+mini-grids operate under the grid \citep{gonzalezgrandon2021} are not modelled.
+\item \textbf{Horizon.} Costs are annualised and the horizon ends after 15 years, which understates stranding late
+in the horizon.
 \item \textbf{Behaviour.} Operators are cost-minimising. Market power and tariff regulation
 \citep{bougebrael2026} are left to the village model.
 \end{itemize}
 
 \section{Conclusion}
 For a third of Madagascar's population the least-cost electrification technology depends on an assumption about
-future demand. Treating that demand as uncertain shows that the main risk is not choosing the wrong technology but
-sizing for a future that has not arrived. A plan that builds for current demand and adapts is near-optimal; an
-intermediate swarm-grid option adds a few percent when its generation is not much dearer than a mini-grid's and
-when hardware can be carried over.
+future demand. Treating that demand as uncertain over three stages and four demand levels, we find that sizing for
+a distant target is the costly mistake: about twice the cost of re-planning in the central case, and more
+expensive on every demand path. Simple re-planning is close to optimal as long as unmet demand during an upgrade
+is not valued at many times the cost of supply. When it is, the optimum builds one tier ahead, selectively, and no
+simple rule replaces the stochastic solution. A swarm-grid option and hardware compatibility are each worth a few
+percent and largely substitute for one another.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}

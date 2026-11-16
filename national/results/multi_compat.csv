@@ -1,0 +1,41 @@
+frictions,g,compatibility,menu,target_musd,myopic_musd,stochastic_musd,target_over_myopic,target_over_stochastic,myopic_gap_pct,start_SA,start_MG,start_oversized,start_size1,start_size2,start_size3,start_size4,start_SW
+none,0.25,central,without swarm,943.2901,364.1069,363.1735,2.5907,2.5974,0.257,0.6598,0.3402,0.0,1.0,0.0,0.0,0.0,
+none,0.25,central,with swarm,935.9845,358.0236,357.3456,2.6143,2.6193,0.1897,0.6361,0.2276,0.0,1.0,0.0,0.0,0.0,0.1363
+none,0.25,swarm hardware stranded by a mini-grid,without swarm,943.2901,364.1069,363.1735,2.5907,2.5974,0.257,0.6598,0.3402,0.0,1.0,0.0,0.0,0.0,
+none,0.25,swarm hardware stranded by a mini-grid,with swarm,936.1211,360.3588,359.7499,2.5977,2.6021,0.1693,0.6671,0.3138,0.0,1.0,0.0,0.0,0.0,0.0191
+none,0.25,stand-alone systems not reusable in a swarm,without swarm,943.2901,364.1069,363.1735,2.5907,2.5974,0.257,0.6598,0.3402,0.0,1.0,0.0,0.0,0.0,
+none,0.25,stand-alone systems not reusable in a swarm,with swarm,936.5494,362.2201,360.9522,2.5856,2.5947,0.3513,0.5719,0.2277,0.0,1.0,0.0,0.0,0.0,0.2004
+none,0.25,stand-alone systems reusable in a mini-grid,without swarm,942.5375,355.3675,355.3675,2.6523,2.6523,0.0,0.7344,0.2656,0.0,1.0,0.0,0.0,0.0,
+none,0.25,stand-alone systems reusable in a mini-grid,with swarm,935.9665,354.4333,354.4333,2.6407,2.6407,0.0,0.6879,0.2262,0.0,1.0,0.0,0.0,0.0,0.0858
+none,0.25,stand-alone systems half reusable in a mini-grid,without swarm,942.9184,360.2345,359.9736,2.6175,2.6194,0.0725,0.6939,0.3061,0.0,1.0,0.0,0.0,0.0,
+none,0.25,stand-alone systems half reusable in a mini-grid,with swarm,935.9845,356.7198,356.531,2.6239,2.6253,0.053,0.6513,0.2274,0.0,1.0,0.0,0.0,0.0,0.1213
+none,0.5,central,without swarm,984.2504,472.1408,467.4409,2.0847,2.1056,1.0054,0.5528,0.4472,0.0,1.0,0.0,0.0,0.0,
+none,0.5,central,with swarm,974.7166,456.8789,454.6971,2.1334,2.1437,0.4798,0.5693,0.2277,0.0,1.0,0.0,0.0,0.0,0.203
+none,0.5,swarm hardware stranded by a mini-grid,without swarm,984.2504,472.1408,467.4409,2.0847,2.1056,1.0054,0.5528,0.4472,0.0,1.0,0.0,0.0,0.0,
+none,0.5,swarm hardware stranded by a mini-grid,with swarm,975.2633,463.3744,460.3434,2.1047,2.1186,0.6584,0.5987,0.4009,0.0,1.0,0.0,0.0,0.0,0.0003
+none,0.5,stand-alone systems not reusable in a swarm,without swarm,984.2504,472.1408,467.4409,2.0847,2.1056,1.0054,0.5528,0.4472,0.0,1.0,0.0,0.0,0.0,
+none,0.5,stand-alone systems not reusable in a swarm,with swarm,976.9765,468.6065,462.5074,2.0849,2.1123,1.3187,0.4429,0.2277,0.0,1.0,0.0,0.0,0.0,0.3294
+none,0.5,stand-alone systems reusable in a mini-grid,without swarm,981.2402,450.8668,450.8668,2.1763,2.1763,0.0,0.7344,0.2656,0.0,1.0,0.0,0.0,0.0,
+none,0.5,stand-alone systems reusable in a mini-grid,with swarm,974.6448,449.4263,449.4263,2.1686,2.1686,0.0,0.6879,0.2262,0.0,1.0,0.0,0.0,0.0,0.0858
+none,0.5,stand-alone systems half reusable in a mini-grid,without swarm,982.7638,461.9104,460.6017,2.1276,2.1337,0.2841,0.6389,0.3611,0.0,1.0,0.0,0.0,0.0,
+none,0.5,stand-alone systems half reusable in a mini-grid,with swarm,974.7166,454.244,453.4268,2.1458,2.1497,0.1802,0.6072,0.2277,0.0,1.0,0.0,0.0,0.0,0.1651
+moderate,0.25,central,without swarm,948.9704,411.3575,411.0201,2.3069,2.3088,0.0821,0.6909,0.3091,0.0,1.0,0.0,0.0,0.0,
+moderate,0.25,central,with swarm,941.5543,401.5115,400.5791,2.345,2.3505,0.2328,0.6498,0.2131,0.0,1.0,0.0,0.0,0.0,0.1371
+moderate,0.25,swarm hardware stranded by a mini-grid,without swarm,948.9704,411.3575,411.0201,2.3069,2.3088,0.0821,0.6909,0.3091,0.0,1.0,0.0,0.0,0.0,
+moderate,0.25,swarm hardware stranded by a mini-grid,with swarm,941.8373,405.0118,404.7467,2.3255,2.327,0.0655,0.7109,0.2601,0.0,1.0,0.0,0.0,0.0,0.029
+moderate,0.25,stand-alone systems not reusable in a swarm,without swarm,948.9704,411.3575,411.0201,2.3069,2.3088,0.0821,0.6909,0.3091,0.0,1.0,0.0,0.0,0.0,
+moderate,0.25,stand-alone systems not reusable in a swarm,with swarm,942.1248,408.5568,406.7391,2.306,2.3163,0.4469,0.5409,0.2131,0.0,1.0,0.0,0.0,0.0,0.2461
+moderate,0.25,stand-alone systems reusable in a mini-grid,without swarm,948.1956,400.971,400.7853,2.3647,2.3658,0.0463,0.7681,0.2319,0.0,1.0,0.0,0.0,0.0,
+moderate,0.25,stand-alone systems reusable in a mini-grid,with swarm,941.5364,398.6695,398.4295,2.3617,2.3631,0.0602,0.6893,0.2131,0.0,1.0,0.0,0.0,0.0,0.0976
+moderate,0.25,stand-alone systems half reusable in a mini-grid,without swarm,948.5858,406.4915,406.4786,2.3336,2.3337,0.0032,0.7309,0.2691,0.0,1.0,0.0,0.0,0.0,
+moderate,0.25,stand-alone systems half reusable in a mini-grid,with swarm,941.5543,400.3768,400.0567,2.3517,2.3536,0.08,0.6611,0.2131,0.0,1.0,0.0,0.0,0.0,0.1258
+moderate,0.5,central,without swarm,1006.9718,579.2453,577.5197,1.7384,1.7436,0.2988,0.632,0.368,0.0005,0.9995,0.0005,0.0,0.0,
+moderate,0.5,central,with swarm,996.996,556.6363,554.0112,1.7911,1.7996,0.4738,0.6553,0.2131,0.0,1.0,0.0,0.0,0.0,0.1316
+moderate,0.5,swarm hardware stranded by a mini-grid,without swarm,1006.9718,579.2453,577.5197,1.7384,1.7436,0.2988,0.632,0.368,0.0005,0.9995,0.0005,0.0,0.0,
+moderate,0.5,swarm hardware stranded by a mini-grid,with swarm,998.1281,566.8483,565.63,1.7608,1.7646,0.2154,0.7077,0.2887,0.0005,0.9995,0.0005,0.0,0.0,0.0035
+moderate,0.5,stand-alone systems not reusable in a swarm,without swarm,1006.9718,579.2453,577.5197,1.7384,1.7436,0.2988,0.632,0.368,0.0005,0.9995,0.0005,0.0,0.0,
+moderate,0.5,stand-alone systems not reusable in a swarm,with swarm,999.2779,573.9453,566.7574,1.7411,1.7631,1.2682,0.4277,0.2131,0.0,1.0,0.0,0.0,0.0,0.3592
+moderate,0.5,stand-alone systems reusable in a mini-grid,without swarm,1003.8724,556.8099,556.1846,1.8029,1.8049,0.1124,0.782,0.218,0.0,1.0,0.0,0.0,0.0,
+moderate,0.5,stand-alone systems reusable in a mini-grid,with swarm,996.9242,552.1888,550.9075,1.8054,1.8096,0.2326,0.7095,0.2131,0.0,1.0,0.0,0.0,0.0,0.0774
+moderate,0.5,stand-alone systems half reusable in a mini-grid,without swarm,1005.4336,568.2045,568.1078,1.7695,1.7698,0.017,0.7262,0.2738,0.0005,0.9995,0.0005,0.0,0.0,
+moderate,0.5,stand-alone systems half reusable in a mini-grid,with swarm,996.996,554.678,553.4184,1.7974,1.8015,0.2276,0.6621,0.2131,0.0,1.0,0.0,0.0,0.0,0.1249

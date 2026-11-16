@@ -1,0 +1,5 @@
+state,kwh_per_household_rural,kwh_per_household_urban,usd_per_person_SA,usd_per_person_MG,usd_per_person_SW,cheapest_SA_mpeople,cheapest_MG_mpeople,cheapest_SW_mpeople,cheapest_SA_no_swarm_mpeople,mg_share_generation,mg_share_lines,mg_share_fixed,negative_generation_residual_share,mg_is_pv_share_people,note
+1,57.3894,991.1139,24.0502,29.6383,26.0286,11.7086,3.8504,1.461,12.4997,0.5669,0.1307,0.3024,0.0,0.9878,
+2,320.2516,991.1139,36.0925,36.8371,35.4226,6.536,9.4679,1.0162,6.8974,0.6515,0.1052,0.2433,0.0,0.9721,
+3,1171.6743,2611.5482,139.7448,71.7024,81.5514,1.4987,13.8672,1.6542,1.9827,0.8218,0.0541,0.1242,0.0,0.9473,
+4,3087.3756,2611.5482,349.5573,122.5865,149.0318,0.0169,16.0846,0.9185,0.0641,0.8957,0.0319,0.0723,0.0,0.9468,grid would reach 3.00 M of these people in the state-4 run

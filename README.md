@@ -4,7 +4,7 @@ Working repository for a possible PhD essay on bottom-up electrification pathway
 (nanogrid → swarm grid → mini-grid). Everything here is a prototype built to find out
 whether the research idea holds, not a finished model.
 
-Start with the working paper, **[`paper/main.pdf`](paper/main.pdf)** (draft v0.1, preliminary).
+Start with the working paper, **[`paper/main.pdf`](paper/main.pdf)** (draft v0.2, preliminary).
 Then **[`docs/research_gap.md`](docs/research_gap.md)**: what exists, where the gap is, what
 the prototype shows, and what could sink the idea. **[`docs/case_study.md`](docs/case_study.md)**
 applies the Ouanes et al. framework to two regions.
@@ -15,8 +15,8 @@ applies the Ouanes et al. framework to two regions.
 
 | Folder | What it is | Status |
 |---|---|---|
-| `paper/` | Working paper: technology choice under demand uncertainty, 128,065 off-grid settlements | Draft v0.1; inputs partly assumed, swarm costs not from field data |
-| `national/` | Two-stage decision model on OnSSET costs, swarm-grid proxy, sensitivity and robustness | Runs; see `national/README.md` |
+| `paper/` | Working paper: when to build ahead of demand, 128,065 off-grid settlements | Draft v0.2; inputs partly assumed, frictions and swarm costs not from field data |
+| `national/` | Multi-stage stochastic model on OnSSET costs (four demand states, frictions, swarm option), experiments and tests | Runs; see `national/README.md` |
 | `docs/research_gap.md` | Literature scan, ranked gaps, paper sequence, route to the MIT/Comillas group | First pass, not a systematic review |
 | `docs/model.tex`, `model.pdf` | Formulation of the planning model | Matches the code |
 | `replication/` | Julia replication of Ouanes et al. (2026), Energy Economics 163, 109598 | Reproduces the paper's pattern with synthetic inputs |
@@ -46,14 +46,16 @@ applies the Ouanes et al. framework to two regions.
    costs are added, demand level decides: at rural Tier 1 with a standard low-voltage line,
    93 % of people around Ambanja and 52 % around Antongil Bay are deferred; at Tier 3
    everything is approved.
-7. **National two-stage analysis.** For 17 million people in 128,065 off-grid settlements,
-   building for the high demand target from day one costs 2.4 times as much as building for
-   current demand and adapting (25 % chance that demand rises), and a third more even if
-   the rise is certain. The simple adaptive rule is within 0.5 % of the stochastic optimum
-   up to a 50 % chance; perfect foresight is worth under 1 %. A swarm-grid option saves 1 to
-   2 % in the central case and up to 11 % with no generation premium. Letting stand-alone
-   systems be absorbed into a later mini-grid saves 2 to 3 %, and then the swarm option
-   adds only 0.3 %.
+7. **National multi-stage analysis.** For 17 million people in 128,065 off-grid settlements,
+   sizing every system for the Tier 3 target from day one costs 2.3 times as much as
+   re-planning for current demand at every stage (25 % chance per five-year stage that
+   demand rises; 1.7 times at 50 %), and more on every demand path. Whether simple
+   re-planning is enough depends on the value of energy not served during an upgrade: up to
+   about USD 2 per kWh it is within 3 % of the stochastic optimum; beyond that the optimum
+   builds one tier ahead in a growing share of settlements and the best simple rule loses
+   up to 13 %. A swarm-grid option saves 2.5 to 4 % in the central case and up to 12 % with
+   no generation premium; letting stand-alone systems be absorbed into a later mini-grid
+   saves about as much, and the two largely substitute for each other.
 8. **Calibration warning.** The paper's cost parameters imply energy at EUR 0.05–0.08/kWh
    against a tariff near EUR 2/kWh. Operating costs are missing.
 
@@ -66,8 +68,8 @@ Julia 1.10+ with JuMP, HiGHS, CSV, DataFrames (tested on 1.13):
     cd ../swarmplan && julia --project=.. test_sanity.jl
     julia --project=.. run_experiments.jl            # about 45 minutes with HiGHS on 2 cores
 
-`onsset_madagascar/README.md` explains the OnSSET run, `national/README.md` the two-stage
-analysis. The paper builds with `pdflatex main && bibtex main && pdflatex main && pdflatex main`. The large input and output files
+`onsset_madagascar/README.md` explains the OnSSET run, `national/README.md` the multi-stage
+analysis and its tests. The paper builds with `pdflatex main && bibtex main && pdflatex main && pdflatex main`. The large input and output files
 are not in the repository.
 
 ## What is assumed

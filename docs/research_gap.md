@@ -237,12 +237,17 @@ Paper 1 alone is a well-defined OR contribution and does not need proprietary da
 
 ## 9. Next steps
 
-**Update, 16 November 2026.** Gap 1 now has a first national-scale answer in
-`paper/main.pdf` (code in `national/`). It narrows the claim: the large effect is the cost
-of sizing for future demand, and a simple adaptive rule captures almost all of it. The
-swarm option itself is worth 1 to 2 % unless its generation is as cheap as a mini-grid's,
-and it is largely a substitute for making stand-alone hardware mini-grid-compatible. The
-steps below still apply; the swarm cost parameters (step 3) are now the binding one.
+**Update, 17 November 2026.** Gap 1 now has a national-scale answer in `paper/main.pdf`
+(code in `national/`): a multi-stage stochastic model with four demand states and
+adaptation frictions. It reshapes the claim. The large effect is the cost of sizing for a
+distant target; whether a stochastic solution is needed at all depends on the value of
+energy not served during an upgrade, which nobody has measured. The swarm option is worth
+2.5 to 4 % in the central case and is largely a substitute for making stand-alone hardware
+mini-grid-compatible. Related work found on the way: Sahlberg et al. (2023, Discover
+Energy) already put partly compatible grid and off-grid assets into OnSSET, with
+deterministic scenarios. Binding next steps: field numbers for swarm costs, upgrade lags
+and the value of unmet demand (step 3), and a national budget per stage, which turns the
+separable model into a decomposition problem.
 
 1. Read Dumitrescu et al. (2022), the Paderborn thesis chapter 5, and Fioriti et al. (2021)
    in full; confirm Gap 1 with a Scopus search.

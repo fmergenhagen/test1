@@ -37,4 +37,4 @@ for s in ax.spines.values():
 fig.legend(loc="upper left", bbox_to_anchor=(0.015, 0.925), ncol=2, frameon=False, fontsize=8.5, labelcolor=INK2, handlelength=1.6, columnspacing=1.4)
 fig.suptitle("Committing early costs far more than guessing wrong", x=0.02, y=0.98, ha="left", fontsize=11.5, weight="bold", color=INK)
 fig.tight_layout(rect=(0, 0, 1, 0.88))
-fig.savefig(os.path.join(HERE, "..", "paper", "fig_cost_vs_p.png"), facecolor=SURF)
+fig.savefig(os.path.join(HERE, "results", "fig_two_stage_cost_vs_p.png"), facecolor=SURF)
