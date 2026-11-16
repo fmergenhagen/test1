@@ -5,7 +5,8 @@ Working repository for a possible PhD essay on bottom-up electrification pathway
 whether the research idea holds, not a finished model.
 
 Start with **[`docs/research_gap.md`](docs/research_gap.md)**: what exists, where the gap
-is, what the prototype shows, and what could sink the idea.
+is, what the prototype shows, and what could sink the idea. Then
+**[`docs/case_study.md`](docs/case_study.md)** for the paper's framework applied to two regions.
 
 ![Settlements whose least-cost technology depends on the demand assumption](docs/fig_madagascar_switch.png)
 
@@ -17,6 +18,7 @@ is, what the prototype shows, and what could sink the idea.
 | `docs/model.tex`, `model.pdf` | Formulation of the planning model | Matches the code |
 | `replication/` | Julia replication of Ouanes et al. (2026), Energy Economics 163, 109598 | Reproduces the paper's pattern with synthetic inputs |
 | `swarmplan/` | New model: network design, price-responsive demand, staged growth, hub upgrade, tariff cap | Prototype, illustrative parameters |
+| `case_study/`, `docs/case_study.md` | The paper's decision framework applied to 2,075 settlements around Antongil Bay and Ambanja, with line costs added | Runs; representative clusters, not real layouts |
 | `onsset_madagascar/` | GEP-OnSSET baseline for Madagascar, affordability and swarm screening scripts | Runs; several parameters assumed |
 
 ## Main findings so far
@@ -36,7 +38,12 @@ is, what the prototype shows, and what could sink the idea.
    tested. Waiting to centralise pays only when demand uncertainty is large and the hub is
    costly (at most about 8 % of cost); in most cases it gains nothing. That value
    disappears if nanogrid hardware is stranded when the hub arrives.
-6. **Calibration warning.** The paper's cost parameters imply energy at EUR 0.05–0.08/kWh
+6. **Case study.** Applied to 2,075 real settlements, the paper's framework gives every
+   settlement the same verdict: defer without budget limits, approve with them. Once line
+   costs are added, demand level decides: at rural Tier 1 with a standard low-voltage line,
+   93 % of people around Ambanja and 52 % around Antongil Bay are deferred; at Tier 3
+   everything is approved.
+7. **Calibration warning.** The paper's cost parameters imply energy at EUR 0.05–0.08/kWh
    against a tariff near EUR 2/kWh. Operating costs are missing.
 
 ## Run

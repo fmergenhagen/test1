@@ -186,6 +186,11 @@ about EUR 0.05–0.08 per kWh, while Nanoé's tariff was about EUR 2 per kWh. Th
 probably cover hardware only (my inference), leaving out installation, staff, logistics and
 non-payment. Any welfare or regulation result needs a fixed operating cost first.
 
+**(e) The paper's framework on real settlements.** See `docs/case_study.md`. Applied to
+2,075 settlements around Antongil Bay and Ambanja, the published framework approves all of
+them with budget limits and defers all of them without. Adding line costs makes demand
+level and settlement geometry decisive. This by itself could be a short paper or comment.
+
 ## 6. A possible paper sequence
 
 1. **OR core.** "Bottom-up or top-down? Valuing modularity in rural electrification."

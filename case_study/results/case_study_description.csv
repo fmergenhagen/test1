@@ -1,0 +1,5 @@
+region,scenario,settlements,people_k,households_median,spacing_m_median,rho_median,rho_p90,GHI_median,SDI_median,PDI_median,AVIN_pct_median,share_standalone_PV
+Ambanja,high demand (rural Tier 3),722.0,273.463,32.629,69.49,0.032,0.109,2175.123,0.174,0.14,1.335,0.051
+Ambanja,low demand (rural Tier 1),728.0,202.319,31.417,69.49,0.032,0.034,2172.448,0.173,0.14,1.331,0.996
+Antongil Bay,high demand (rural Tier 3),1109.0,450.259,38.614,60.482,0.032,0.211,1728.0,0.172,0.139,1.336,0.0
+Antongil Bay,low demand (rural Tier 1),1347.0,719.09,39.404,55.177,0.435,0.598,1732.0,0.246,0.173,8.219,0.885
