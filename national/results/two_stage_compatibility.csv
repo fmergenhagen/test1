@@ -1,0 +1,17 @@
+compatibility,p_high,menu,swarm_premium,swarm_fixed,swarm_lv,plan_for_low_musd,plan_for_high_musd,stochastic_musd,perfect_info_musd,usd_per_person_stochastic,"share_people: MG, sized for low demand","share_people: SA, sized for low demand","share_people: SW, sized for low demand"
+all reusable,0.25,without swarm,0.3,2500.0,2000.0,401.2296,947.9666,400.7086,397.4487,23.5434,0.326,0.674,0.0
+all reusable,0.25,with swarm,0.3,2500.0,2000.0,397.7418,941.5665,396.8372,392.9367,23.3159,0.2277,0.5783,0.194
+all reusable,0.5,without swarm,0.3,2500.0,2000.0,527.0016,978.2264,524.3988,519.4398,30.8107,0.4224,0.5776,0.0
+all reusable,0.5,with swarm,0.3,2500.0,2000.0,520.6404,972.1145,516.2438,511.03,30.3316,0.2277,0.4361,0.3362
+swarm hardware stranded by a mini-grid,0.25,without swarm,0.3,2500.0,2000.0,401.2296,947.9666,400.7086,397.4487,23.5434,0.326,0.674,0.0
+swarm hardware stranded by a mini-grid,0.25,with swarm,0.3,2500.0,2000.0,399.06,941.5665,398.5237,394.9207,23.415,0.3077,0.6632,0.0291
+swarm hardware stranded by a mini-grid,0.5,without swarm,0.3,2500.0,2000.0,527.0016,978.2264,524.3988,519.4398,30.8107,0.4224,0.5776,0.0
+swarm hardware stranded by a mini-grid,0.5,with swarm,0.3,2500.0,2000.0,523.2767,972.1145,520.2313,514.9981,30.5658,0.4223,0.5776,0.0
+stand-alone systems not reusable in a swarm,0.25,without swarm,0.3,2500.0,2000.0,401.2296,947.9666,400.7086,397.4487,23.5434,0.326,0.674,0.0
+stand-alone systems not reusable in a swarm,0.25,with swarm,0.3,2500.0,2000.0,399.5631,941.5665,398.6561,394.5427,23.4228,0.2277,0.5781,0.1942
+stand-alone systems not reusable in a swarm,0.5,without swarm,0.3,2500.0,2000.0,527.0016,978.2264,524.3988,519.4398,30.8107,0.4224,0.5776,0.0
+stand-alone systems not reusable in a swarm,0.5,with swarm,0.3,2500.0,2000.0,524.2829,972.1145,519.8691,514.2422,30.5446,0.2277,0.4355,0.3368
+stand-alone systems reusable in a mini-grid,0.25,without swarm,0.3,2500.0,2000.0,391.3828,947.9666,391.3828,391.3828,22.9954,0.2656,0.7344,0.0
+stand-alone systems reusable in a mini-grid,0.25,with swarm,0.3,2500.0,2000.0,390.2465,941.5665,390.2465,390.2465,22.9287,0.2262,0.6879,0.0858
+stand-alone systems reusable in a mini-grid,0.5,without swarm,0.3,2500.0,2000.0,507.308,978.2264,507.308,507.308,29.8065,0.2656,0.7344,0.0
+stand-alone systems reusable in a mini-grid,0.5,with swarm,0.3,2500.0,2000.0,505.6498,972.1145,505.6498,505.6498,29.7091,0.2262,0.6879,0.0858

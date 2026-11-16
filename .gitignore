@@ -7,3 +7,6 @@ onsset_madagascar/data/
 onsset_madagascar/out_*/
 onsset_madagascar/code/
 *.zip
+*.bbl
+*.blg
+national/results/first_stage_choice_p25.csv

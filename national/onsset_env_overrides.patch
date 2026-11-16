@@ -1,0 +1,23 @@
+diff -ru '--exclude=__pycache__' '--exclude=*.pyc' a/onsset.py b/onsset.py
+--- a/onsset.py	2026-11-16 18:17:15.851534685 +0100
++++ b/onsset.py	2026-11-16 20:33:44.577636284 +0100
+@@ -278,7 +278,7 @@
+         td_investment_cost = td_investment_cost * grid_penalty_ratio
+ 
+         if self.mini_grid:
+-            td_investment_cost += 10000
++            td_investment_cost += float(os.environ.get('MG_FIXED_COST', 10000))
+ 
+         td_om_cost = td_investment_cost * self.om_of_td_lines * penalty
+         installed_capacity = peak_load / capacity_factor
+diff -ru '--exclude=__pycache__' '--exclude=*.pyc' a/runner.py b/runner.py
+--- a/runner.py	2026-11-16 18:17:15.991634563 +0100
++++ b/runner.py	2026-11-16 20:33:44.577845495 +0100
+@@ -186,6 +186,7 @@
+                                       start_year=start_year,
+                                       end_year=end_year,
+                                       discount_rate=0.08,
++                                      lv_line_cost=float(os.environ.get('LV_LINE_COST', 4250)),
+                                       )
+ 
+         grid_calc = Technology(om_of_td_lines=0.02,

@@ -237,6 +237,13 @@ Paper 1 alone is a well-defined OR contribution and does not need proprietary da
 
 ## 9. Next steps
 
+**Update, 16 November 2026.** Gap 1 now has a first national-scale answer in
+`paper/main.pdf` (code in `national/`). It narrows the claim: the large effect is the cost
+of sizing for future demand, and a simple adaptive rule captures almost all of it. The
+swarm option itself is worth 1 to 2 % unless its generation is as cheap as a mini-grid's,
+and it is largely a substitute for making stand-alone hardware mini-grid-compatible. The
+steps below still apply; the swarm cost parameters (step 3) are now the binding one.
+
 1. Read Dumitrescu et al. (2022), the Paderborn thesis chapter 5, and Fioriti et al. (2021)
    in full; confirm Gap 1 with a Scopus search.
 2. Write to the first author of the Ouanes paper: share the replication, the pricing
