@@ -147,10 +147,22 @@ What this shows:
   about EUR 2.2 a week over any pathway that decides at the start (on a cost of about 28).
 - **The classic mini-grid is never the best pathway** in this parameterisation.
 - **Staging has value only when uncertainty is large and the hub is costly.** In 15 of the
-  18 cases in `regime_map.csv` waiting gains nothing beyond solver tolerance. One reason is
-  built in: capacity can be added later at the same unit cost, nothing is stranded when the
-  hub arrives, and there are no lead times. Whether swarm hardware stays useful after
-  centralisation (compatibility) is therefore the assumption to test first.
+  18 cases in `regime_map.csv` waiting gains nothing beyond solver tolerance. Capacity can
+  be added later at the same unit cost and there are no lead times, which works against
+  finding a value of waiting.
+
+**Compatibility test.** `results/compatibility.csv` repeats the case where staging paid
+(growth ×4, F=8) and strands part of the nanogrid hardware once the hub arrives:
+
+| Share of nanogrid hardware stranded by the hub | Best pathway | Staged upgrade vs. best decide-now pathway |
+|---|---|---|
+| 0 % | Swarm, hub if demand is high | +2.2 |
+| 50 % | Swarm, hub if demand is high | +0.6 (close to solver tolerance) |
+| 100 % | Swarm only | −0.9 |
+
+The value of the staged path is a statement about hardware compatibility. If swarm
+equipment survives centralisation, starting small and upgrading is the best plan; if it
+does not, the choice collapses back to swarm or mini-grid.
 
 Practitioners describe hub-and-spoke mesh layouts (Okra); I have not checked how close
 they are to the hybrid design the model picks.
@@ -208,8 +220,8 @@ Paper 1 alone is a well-defined OR contribution and does not need proprietary da
 - **The option value may be small.** In the prototype, staging is worth nothing in most
   cases and at most about 8 % of cost. If that holds with realistic costs, the headline
   becomes "staging rarely matters; a hub feeding a swarm does", which is publishable but a
-  different paper. Lumpy sizing, lead times and hardware compatibility need to go in before
-  drawing that conclusion.
+  different paper. Lumpy sizing and lead times need to go in before drawing that
+  conclusion, and hardware compatibility needs real engineering input.
 - **Parameters.** Line costs, hub costs, scale economies and willingness to pay are
   assumed. Okra, CrossBoundary and Nanoé have real numbers; getting them is step one.
 - **Someone is already doing it.** The authors of the Ouanes paper list uncertainty and

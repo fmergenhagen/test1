@@ -34,7 +34,8 @@ is, what the prototype shows, and what could sink the idea.
    about a third of potential demand and builds about a third of the solar capacity.
 5. **Staged growth.** A hub that feeds a swarm beats the classic mini-grid in every case
    tested. Waiting to centralise pays only when demand uncertainty is large and the hub is
-   costly (at most about 8 % of cost); in most cases it gains nothing.
+   costly (at most about 8 % of cost); in most cases it gains nothing. That value
+   disappears if nanogrid hardware is stranded when the hub arrives.
 6. **Calibration warning.** The paper's cost parameters imply energy at EUR 0.05–0.08/kWh
    against a tariff near EUR 2/kWh. Operating costs are missing.
 
@@ -45,7 +46,7 @@ Julia 1.10+ with JuMP, HiGHS, CSV, DataFrames (tested on 1.13):
     julia --project=. -e 'using Pkg; Pkg.instantiate()'
     cd replication && python make_inputs.py && julia --project=.. run_scenarios.jl && julia --project=.. breakeven.jl
     cd ../swarmplan && julia --project=.. test_sanity.jl
-    julia --project=.. run_experiments.jl            # about 30 minutes with HiGHS
+    julia --project=.. run_experiments.jl            # about 45 minutes with HiGHS on 2 cores
 
 `onsset_madagascar/README.md` explains the OnSSET run. The large input and output files
 are not in the repository.

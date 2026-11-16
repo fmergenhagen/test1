@@ -75,6 +75,14 @@ subject to, for all $n$ (and $i,r,h$ where they appear):
 \end{align}
 Non-anticipativity is built in by indexing decisions on tree nodes.
 
+\paragraph{Compatibility (optional).} A share $\chi\in[0,1]$ of nanogrid-level hardware becomes
+unusable once the hub exists. Usable capacities $\tilde S_{in}\le S_{in}$ and
+$\tilde B_{in}\le B_{in}$ replace $S,B$ in the capacity limits for $i\ge1$, with
+\[
+\tilde S_{in}\le(1-\chi)S_{in}+\bar S(1-u_n),\qquad \tilde B_{in}\le(1-\chi)B_{in}+\bar B(1-u_n).
+\]
+Costs are still paid on $S,B$, so stranded hardware is a sunk cost.
+
 \section{Pathways as restrictions of one model}
 \begin{tabular}{@{}lll@{}}
 \toprule

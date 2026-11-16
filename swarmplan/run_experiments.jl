@@ -1,12 +1,12 @@
 # Experiments for the SwarmPlan prototype. Results are written to results/ as each block
-# finishes.   usage: julia --project=.. run_experiments.jl [static] [spacing] [regime] [regime_summary] [tariff]
+# finishes.   usage: julia --project=.. run_experiments.jl [static] [spacing] [regime] [regime_summary] [tariff] [compat] [compat_summary]
 include("SwarmPlan.jl"); using .SwarmPlan
 include("village.jl")
 using CSV, DataFrames, Printf
 
 out(name) = joinpath(@__DIR__, "results", name)
 mkpath(joinpath(@__DIR__, "results"))
-todo = isempty(ARGS) ? ["static", "spacing", "regime", "regime_summary", "tariff"] : ARGS
+todo = isempty(ARGS) ? ["static", "spacing", "regime", "regime_summary", "tariff", "compat", "compat_summary"] : ARGS
 r2(x) = round(x, digits = 3)
 
 # ---------------------------------------------------------------- 1. static comparison
@@ -115,5 +115,49 @@ if "tariff" in todo
                    operator_profit = r2(r.profit), welfare = r2(r.welfare)))
         CSV.write(out("tariff_regulation.csv"), df)
     end
+    println(df)
+end
+
+# ---------------------------------------------------------------- 5. compatibility
+# Does staging still pay if nanogrid hardware is (partly) stranded when the hub arrives?
+# Growth factor 4, where staging mattered. Swarm-only and the classic mini-grid do not
+# depend on `strand`; they are read from the regime results.
+if "compat" in todo
+    v = build_village(single_day = true)
+    tr = two_stage_tree(1.0, 4.0)
+    strands = haskey(ENV, "STRAND") ? parse.(Float64, split(ENV["STRAND"], ",")) : [0.5, 1.0]
+    for sdr in strands
+        df = DataFrame()
+        tech = Tech(hub_fixed = 0.0, k_neigh = 2, strand = sdr)
+        for (name, kw, wgt) in patterns[2:4]
+            t = @elapsed r = plan(v, tr; tech = tech, gap = 0.001, time_limit = 240.0, kw...)
+            push!(df, (strand = sdr, growth_high = 4.0, pathway = name, hub_weight = wgt, welfare_F0 = r2(r.welfare),
+                       cost_F0 = r2(r.cost), served_share = r2(r.served_share), lines_now = r.lines[1],
+                       lines_high = r.lines[3], feeders_high = r.feeders[3], pv_hub_high = r2(r.pv_hub[3]),
+                       pv_total_high = r2(r.pv[3]), status = string(r.status),
+                       mip_gap = round(r.gap, digits = 5), seconds = r2(t)))
+            CSV.write(out("compat_patterns_strand$(sdr).csv"), df)
+        end
+        println(df)
+    end
+end
+
+if "compat_summary" in todo
+    base = CSV.read(out("regime_patterns_hi4.0.csv"), DataFrame)
+    base.strand .= 0.0
+    files = filter(f -> startswith(f, "compat_patterns_strand"), readdir(joinpath(@__DIR__, "results")))
+    cp = vcat([CSV.read(out(f), DataFrame) for f in files]...)
+    fixed = base[in.(base.pathway, Ref(["swarm_only", "minigrid_upfront"])), :]
+    df = DataFrame()
+    for sdr in sort(unique(vcat(0.0, cp.strand))), F in (3.0, 8.0)
+        g = sdr == 0.0 ? base : vcat(cp[cp.strand .== sdr, names(cp)], fixed[:, names(cp)])
+        val = g.welfare_F0 .- F .* g.hub_weight
+        row = Dict(p => r2(val[findfirst(==(p), g.pathway)]) for p in g.pathway)
+        k = argmax(val)
+        push!(df, (strand = sdr, hub_fixed = F, best_pathway = g.pathway[k], swarm_only = row["swarm_only"],
+                   upgrade_if_high = row["upgrade_if_high"], upgrade_later = row["upgrade_later"],
+                   hybrid_upfront = row["hybrid_upfront"], minigrid_upfront = row["minigrid_upfront"]))
+    end
+    CSV.write(out("compatibility.csv"), df)
     println(df)
 end

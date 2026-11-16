@@ -42,6 +42,15 @@ tol = 0.5        # EUR per week; MILP solves use a 0.1 % gap on a welfare of abo
         @test w[1] >= w[2] >= w[3]
     end
 
+    @testset "stranding only matters when a hub exists, and it never helps" begin
+        s0 = plan(v, static_tree(); strategy = :swarm, tech = Tech(strand = 1.0), gap = 0.001)
+        @test abs(s0.welfare - sw.welfare) <= tol
+        h0 = plan(v, static_tree(); strategy = :ladder, hub_pattern = [1], gap = 0.001, time_limit = 120.0)
+        h1 = plan(v, static_tree(); strategy = :ladder, hub_pattern = [1], tech = Tech(strand = 1.0), gap = 0.001, time_limit = 120.0)
+        @test h1.welfare <= h0.welfare + tol
+        @test h1.welfare >= mg.welfare - tol      # full stranding leaves at least the classic mini-grid
+    end
+
     @testset "scaling demand and budgets together leaves the served share unchanged" begin
         tr = two_stage_tree(1.0, 3.0)
         r = plan(v, tr; strategy = :isolated)

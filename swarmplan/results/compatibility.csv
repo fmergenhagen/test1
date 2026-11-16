@@ -1,0 +1,7 @@
+strand,hub_fixed,best_pathway,swarm_only,upgrade_if_high,upgrade_later,hybrid_upfront,minigrid_upfront
+0.0,3.0,hybrid_upfront,396.431,400.077,399.253,401.64,399.882
+0.0,8.0,upgrade_if_high,396.431,398.827,396.753,396.64,394.882
+0.5,3.0,hybrid_upfront,396.431,398.32,396.09,401.368,399.882
+0.5,8.0,upgrade_if_high,396.431,397.07,393.59,396.368,394.882
+1.0,3.0,hybrid_upfront,396.431,396.808,392.959,401.141,399.882
+1.0,8.0,swarm_only,396.431,395.558,390.459,396.141,394.882

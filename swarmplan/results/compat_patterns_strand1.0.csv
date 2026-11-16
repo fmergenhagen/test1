@@ -1,0 +1,4 @@
+strand,growth_high,pathway,hub_weight,welfare_F0,cost_F0,served_share,lines_now,lines_high,feeders_high,pv_hub_high,pv_total_high,status,mip_gap,seconds
+1.0,4.0,upgrade_if_high,0.25,397.558,29.78,1.0,5,9,4,44.359,55.511,OPTIMAL,0.00099,76.952
+1.0,4.0,upgrade_later,0.5,394.459,32.819,0.999,5,7,5,44.139,55.291,OPTIMAL,0.001,88.422
+1.0,4.0,hybrid_upfront,1.0,404.141,23.135,0.999,6,7,5,44.195,44.195,OPTIMAL,0.00099,38.014

@@ -15,6 +15,8 @@ What it adds to the equilibrium model of Ouanes et al. (2026):
                   costs (economies of scale) and stronger lines.
   5. Regulation.  A single operator who sets a uniform tariff, with or without a price cap
                   (solved by enumerating the tariff over the WTP levels).
+  6. Compatibility. `Tech.strand` is the share of nanogrid-level assets that becomes
+                  unusable once the hub exists (e.g. DC hardware on an AC mini-grid).
 
 Strategies (all evaluated on the same tree, so they are directly comparable):
   :isolated   nanogrid-level assets only, no lines
@@ -69,6 +71,7 @@ Base.@kwdef struct Tech
     cap_feeder::Float64 = 10.0   # kWh per hour
     loss_feeder::Float64 = 0.00005
     budget_scales::Bool = true   # household budgets grow with the demand growth factor
+    strand::Float64 = 0.0        # share of nanogrid-level PV/battery made unusable once the hub exists
 end
 
 "Scenario tree: parent[n] = 0 for the root; growth[n] multiplies demand; prob[n] sums to 1 per stage."
@@ -146,7 +149,12 @@ function plan(v::Village, tree::Tree; strategy::Symbol = :ladder, tech::Tech = T
         y[1:length(E), 1:N], Bin              # swarm line built
         z[1:I, 1:N], Bin                      # feeder built
         u[1:N], Bin                           # hub built
+        Su[1:I, 1:N] >= 0                     # usable nanogrid PV (differs from S only if strand > 0)
+        Bu[1:I, 1:N] >= 0                     # usable nanogrid battery
     end)
+    stranding = tech.strand > 0
+    capS(i, n) = (stranding && i >= 1) ? Su[i, n] : S[i, n]
+    capB(i, n) = (stranding && i >= 1) ? Bu[i, n] : B[i, n]
 
     for n in 1:N
         pa = tree.parent[n]; gr = tree.growth[n]
@@ -167,8 +175,18 @@ function plan(v::Village, tree::Tree; strategy::Symbol = :ladder, tech::Tech = T
         end
         # tight big-M: the hub never needs more than the village's peak-day energy
         peak = gr * maximum(sum(s.demand[r, h] for s in v.sites, h in 1:H) for r in 1:R)
-        @constraint(m, S[0, n] <= 3 * peak / minimum(sum(v.solar, dims = 2)) * u[n])
-        @constraint(m, B[0, n] <= 3 * peak * u[n])
+        maxS = 3 * peak / minimum(sum(v.solar, dims = 2)); maxB = 3 * peak
+        @constraint(m, S[0, n] <= maxS * u[n])
+        @constraint(m, B[0, n] <= maxB * u[n])
+        if stranding
+            # compatibility: with the hub in place only a share (1 - strand) of nanogrid assets is usable
+            @constraint(m, [i in 1:I], S[i, n] <= maxS)
+            @constraint(m, [i in 1:I], B[i, n] <= maxB)
+            @constraint(m, [i in 1:I], Su[i, n] <= S[i, n])
+            @constraint(m, [i in 1:I], Bu[i, n] <= B[i, n])
+            @constraint(m, [i in 1:I], Su[i, n] <= (1 - tech.strand) * S[i, n] + maxS * (1 - u[n]))
+            @constraint(m, [i in 1:I], Bu[i, n] <= (1 - tech.strand) * B[i, n] + maxB * (1 - u[n]))
+        end
         @constraint(m, [i in 1:I], z[i, n] <= u[n])
         if !ignore_budgets
             for i in 1:I
@@ -181,10 +199,10 @@ function plan(v::Village, tree::Tree; strategy::Symbol = :ladder, tech::Tech = T
         for r in 1:R, h in 1:H
             hp = h == 1 ? H : h - 1                 # cyclic representative day
             for i in 0:I
-                @constraint(m, g[i, r, h, n] <= S[i, n] * v.solar[r, h])
-                @constraint(m, ch[i, r, h, n] <= tech.c_rate * B[i, n])
-                @constraint(m, dis[i, r, h, n] <= tech.c_rate * B[i, n])
-                @constraint(m, soc[i, r, h, n] <= B[i, n])
+                @constraint(m, g[i, r, h, n] <= capS(i, n) * v.solar[r, h])
+                @constraint(m, ch[i, r, h, n] <= tech.c_rate * capB(i, n))
+                @constraint(m, dis[i, r, h, n] <= tech.c_rate * capB(i, n))
+                @constraint(m, soc[i, r, h, n] <= capB(i, n))
                 @constraint(m, soc[i, r, h, n] == (1 - tech.self_dis) * soc[i, r, hp, n] +
                                                    tech.eta * ch[i, r, h, n] - dis[i, r, h, n] / tech.eta)
             end
