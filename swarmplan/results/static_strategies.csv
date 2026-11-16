@@ -1,0 +1,4 @@
+strategy,welfare,consumer_value,cost,network_cost,served_share,pv_kWp,battery_kWh,lines,line_metres,feeders,status,mip_gap,seconds
+isolated,180.107,188.195,8.088,0.0,0.636,7.147,11.215,0,-0.0,0,OPTIMAL,0.0,8.624
+swarm,226.218,244.193,17.975,2.045,1.0,11.514,25.426,5,340.868,0,OPTIMAL,0.002,49.096
+minigrid,219.784,244.193,24.41,13.585,1.0,11.072,24.585,0,-0.0,8,OPTIMAL,0.0,0.285

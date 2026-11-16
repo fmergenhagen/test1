@@ -1,0 +1,6 @@
+growth_high,pathway,hub_weight,welfare_F0,cost_F0,served_share,served_high,lines_now,lines_high,feeders_high,pv_hub_high,pv_total_high,status,mip_gap,seconds
+2.5,swarm_only,0.0,311.678,24.088,1.0,1.0,6,8,0,0.0,27.791,OPTIMAL,0.001,88.874
+2.5,upgrade_if_high,0.25,313.566,22.2,1.0,1.0,5,6,1,15.415,27.764,OPTIMAL,0.001,126.783
+2.5,upgrade_later,0.5,313.55,22.216,1.0,1.0,5,6,2,15.346,27.694,OPTIMAL,0.00099,91.283
+2.5,hybrid_upfront,1.0,317.443,18.322,1.0,1.0,4,7,3,25.91,27.834,TIME_LIMIT,0.0016,200.152
+2.5,minigrid_upfront,1.0,315.354,20.412,1.0,1.0,0,0,8,27.436,27.436,OPTIMAL,0.0,0.532

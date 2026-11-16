@@ -1,0 +1,9 @@
+Manifest.toml
+*.aux
+*.log
+*.out
+__pycache__/
+onsset_madagascar/data/
+onsset_madagascar/out_*/
+onsset_madagascar/code/
+*.zip

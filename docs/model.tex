@@ -1,0 +1,146 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.0cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,enumitem,hyperref,xcolor}
+\usepackage[T1]{fontenc}
+\setlist{itemsep=2pt,topsep=4pt}
+\newcommand{\E}{\mathbb{E}}
+\title{SwarmPlan: a multi-stage network-design model\\ for bottom-up electrification pathways}
+\author{Working formulation -- prototype in \texttt{swarmplan/SwarmPlan.jl}}
+\date{16 November 2026}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Purpose.} Decide, for one village, \emph{what to build, where, and when} as demand
+unfolds: nanogrid-level solar and storage, peer-to-peer (swarm) lines between nanogrids, and
+an optional upgrade to a mini-grid hub. The model extends the equilibrium model of Ouanes,
+Gonz\'alez Grand\'on, Fagerli and Gabriel (2026, \emph{Energy Economics} 163, 109598) in four
+directions: space, price-responsive demand, staged investment under uncertainty, and the
+swarm-to-mini-grid upgrade.
+
+\section{Cookbook: the model in six steps}
+\begin{enumerate}
+  \item \textbf{Scenario tree.} Nodes $n\in\mathcal{N}$ with parent $a(n)$, probability $\pi_n$,
+        demand growth factor $\gamma_n$. Stages have equal length.
+  \item \textbf{Sites.} Nanogrids $i\in\mathcal{I}$ with coordinates; index $0$ is the hub at the
+        village centroid. Candidate swarm lines $e=(i,j)\in\mathcal{E}$ (nearest neighbours) with
+        length $\ell_e$; feeders hub--site with length $\ell_i^{0}$.
+  \item \textbf{Time.} Representative days $r$ with weights $\omega_r$ (sum $=7$ days), hours $h$.
+  \item \textbf{Demand.} Load $D_{irh}$ is split into blocks $k$ with share $\sigma_k$ and
+        willingness to pay $w_k$ (decreasing). Served demand $d_{ikrhn}\le\sigma_k\gamma_nD_{irh}$.
+  \item \textbf{Investment.} Capacities and lines are cumulative and irreversible along the tree.
+  \item \textbf{Objective.} Maximise expected welfare $=$ consumer value $-$ cost.
+\end{enumerate}
+
+\section{Decision variables}
+\begin{tabular}{@{}ll@{}}
+\toprule
+$S_{in},B_{in}\ge0$ & PV (kWp) and battery (kWh) at site $i$, node $n$; $i=0$ is the hub\\
+$y_{en}\in\{0,1\}$ & swarm line $e$ built\\
+$z_{in}\in\{0,1\}$ & feeder hub--site $i$ built\\
+$u_n\in\{0,1\}$ & hub built (mini-grid upgrade)\\
+$g,c^{+},c^{-},s\ge0$ & solar used, charge, discharge, state of charge (per $i,r,h,n$)\\
+$d_{ikrhn}\ge0$ & served demand in block $k$\\
+$f_{e}^{\rightarrow},f_{e}^{\leftarrow}\ge0$ & swarm flows; $\phi_i^{\downarrow},\phi_i^{\uparrow}\ge0$ feeder flows\\
+\bottomrule
+\end{tabular}
+
+\section{Formulation}
+\begin{align}
+\max\quad & \sum_{n}\frac{\pi_n}{T}\Big[\underbrace{\sum_{i,k,r,h}\omega_r w_k d_{ikrhn}}_{\text{consumer value}}
+ - \underbrace{\sum_{i\ge1}\big(c^{S}S_{in}+c^{B}B_{in}\big)}_{\text{nanogrid assets}}
+ - \underbrace{\theta\big(c^{S}S_{0n}+c^{B}B_{0n}\big)-F u_n}_{\text{hub}} \notag\\
+ &\qquad - \sum_{e}c^{L}\ell_e y_{en}-\sum_i c^{F}\ell^{0}_i z_{in} - \text{OPEX}_n\Big]
+ \qquad(\theta<1\text{: scale economies},\ F\text{: fixed cost}) \label{obj}
+\end{align}
+subject to, for all $n$ (and $i,r,h$ where they appear):
+\begin{align}
+& g_{irhn}+c^{-}_{irhn}-c^{+}_{irhn}
+  +\!\!\sum_{e\ni i}\!\big[(1-\lambda\ell_e)f^{\text{in}}_{e}-f^{\text{out}}_{e}\big]
+  +(1-\lambda^{F}\ell^{0}_i)\phi^{\downarrow}_{i}-\phi^{\uparrow}_{i}=\sum_k d_{ikrhn}
+  && \text{site balance}\label{bal}\\
+& g_{0rhn}+c^{-}_{0rhn}-c^{+}_{0rhn}+\sum_i\big[(1-\lambda^{F}\ell^{0}_i)\phi^{\uparrow}_{i}-\phi^{\downarrow}_{i}\big]=0
+  && \text{hub balance}\\
+& s_{irhn}=(1-\delta)s_{ir,h-1,n}+\eta c^{+}_{irhn}-c^{-}_{irhn}/\eta,\quad s_{ir0n}=s_{irHn}
+  && \text{storage}\\
+& g_{irhn}\le S_{in}\,\rho_{rh},\quad c^{\pm}_{irhn}\le\kappa B_{in},\quad s_{irhn}\le B_{in}
+  && \text{limits}\\
+& f_e\le\bar f\,y_{en},\qquad \phi_i\le\bar\phi\,z_{in},\qquad z_{in}\le u_n,\qquad S_{0n},B_{0n}\le M u_n
+  && \text{network}\\
+& d_{ikrhn}\le\sigma_k\gamma_nD_{irh}
+  && \text{demand}\\
+& c^{S}S_{in}+c^{B}B_{in}\le m_i\,\gamma_n\quad(i\ge1)
+  && \text{budget}\label{bud}\\
+& S_{in}\ge S_{i,a(n)},\ B_{in}\ge B_{i,a(n)},\ y_{en}\ge y_{e,a(n)},\ z_{in}\ge z_{i,a(n)},\ u_n\ge u_{a(n)}
+  && \text{irreversible}\label{irr}
+\end{align}
+Non-anticipativity is built in by indexing decisions on tree nodes.
+
+\section{Pathways as restrictions of one model}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Pathway & Restriction & Interpretation\\
+\midrule
+Isolated & $y=z=u=0$ & solar home systems / stand-alone nanogrids\\
+Swarm & $u=0$ & interconnect, never centralise\\
+Mini-grid upfront & $u_n=1\ \forall n$, $S_{in}=B_{in}=0$ for $i\ge1$ & classic mini-grid\\
+Staged upgrade & $u$ fixed to a pattern, e.g.\ $(0,0,1)$ & centralise only if demand is high\\
+Ladder & none & best of all\\
+\bottomrule
+\end{tabular}
+
+\medskip\noindent Because every pathway is a restriction of the ladder, differences in the optimal value
+are directly interpretable: $V^{\text{ladder}}-\max\{V^{\text{swarm}},V^{\text{mini-grid}}\}$ is the
+\textbf{option value of modularity}, the quantity the swarm literature asserts but has not measured.
+
+\section{Operator and regulation layer}
+A single operator owns all assets and posts one tariff $p$. Customers buy block $k$ iff
+$w_k\ge p$. The operator solves \eqref{bal}--\eqref{irr} without \eqref{bud} and with objective
+$\max\; p\sum d - \text{cost}$. With step demand the optimal tariff lies in $\{w_k\}$, so the
+operator problem is solved by enumeration; a price cap $\bar p$ restricts the set to $w_k\le\bar p$.
+Welfare is evaluated ex post with the consumer value in \eqref{obj}.
+
+\paragraph{Next step (the OR contribution).} Replace enumeration by a bilevel program:
+\[
+\max_{\bar p,\ \text{subsidy}}\ \text{welfare}\big(x^\ast\big)\quad\text{s.t.}\quad
+x^\ast\in\arg\max_x\{\text{operator profit}(x;\bar p,\text{subsidy})\},\ \ \text{profit}\ge0 ,
+\]
+with continuous inverse demand $p_i(q)=\alpha_i-\beta_iq$. The lower level is then a convex QP whose
+KKT system gives an MPEC (Gabriel et al.\ 2012, ch.\ 6); with several competing operators it becomes
+an EPEC. Binary network decisions sit in the upper level or are handled by decomposition.
+
+\section{How this differs from Ouanes et al.\ (2026)}
+\begin{tabular}{@{}p{3.2cm}p{5.6cm}p{6.6cm}@{}}
+\toprule
+ & Paper & SwarmPlan\\
+\midrule
+Demand & fixed & price-responsive (WTP blocks)\\
+Welfare & weighted score, converted at an assumed rate & consumer value minus cost, in EUR\\
+Interconnection & free, single bus & lines chosen, cost per metre, losses\\
+Time & one week, one design & staged on a scenario tree\\
+Mini-grid & not modelled & hub upgrade with fixed cost and scale economies\\
+Market power & changes transfers only & changes quantities and investment\\
+Size & 3 nanogrids & 8 sites (prototype), any number in principle\\
+\bottomrule
+\end{tabular}
+
+\section{What is assumed, not measured}
+Line costs, capacities and losses; hub fixed cost $F$ and scale factor $\theta$; WTP levels and
+shares; site positions and budgets beyond the paper's three values; demand growth factors. Load and
+solar profiles are synthetic stand-ins calibrated to the paper's figures. Results from the prototype
+show mechanisms and orders of magnitude, not estimates.
+
+\section{Known limits and extensions}
+\begin{itemize}
+  \item \textbf{Budget constraint.} \eqref{bud} ties asset location to ownership. With one operator the
+        real friction is household credit, so the budget should be on upfront payments, with an
+        operator cost of capital. Interconnection then competes with pay-as-you-go finance.
+  \item \textbf{Solver.} Fixed-charge network design has a weak LP relaxation. HiGHS needs minutes for
+        the two-stage case; Gurobi, or Benders decomposition by tree node, is the route to larger
+        villages and deeper trees.
+  \item \textbf{Lead times.} Investments are available in the node where they are decided.
+  \item \textbf{Grid arrival.} Add a node attribute ``grid arrives'' with a feeder to the main grid;
+        this links to the undergrid mini-grid literature.
+  \item \textbf{National scale.} Fit a reduced form (welfare gain as a function of settlement size,
+        spacing and budget inequality) and use it as a fourth technology in OnSSET.
+\end{itemize}
+\end{document}
